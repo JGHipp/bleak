@@ -6,5 +6,5 @@ Default tilemap loaded is level/default.data.
 WASD	- Move the player<br />
 Z		- Jump<br />
 
-#Gallery
+# Gallery
 ![Screenshot](https://raw.githubusercontent.com/JGHipp/bleak/master/screenshots/1.png)
