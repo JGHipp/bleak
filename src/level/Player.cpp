@@ -62,7 +62,7 @@ void Player::checkLeftCollision(Rectangle delta, Rectangle* tile)
 void Player::checkRightCollision(Rectangle delta, Rectangle* tile)
 { if(delta.intersects(*tile)) bdx += (-(delta.x + delta.width - tile->x)); }
 void Player::checkTopCollision(Rectangle delta, Rectangle* tile)
-{ if(delta.intersects(*tile)) bdy += (tile->y + tile->height - delta.y); }
+{ if(delta.intersects(*tile)) {bdy += (tile->y + tile->height - delta.y); setDy(0); } }
 void Player::checkBottomCollision(Rectangle delta, Rectangle* tile)
 { if(delta.intersects(*tile)) bdy += (-(delta.y + delta.height - tile->y)); }
 

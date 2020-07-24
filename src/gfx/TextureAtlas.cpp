@@ -10,7 +10,7 @@ std::vector<std::string> textureAtlasTextureIds, textureAtlasAnimationIds;
 void initTextureAtlas()
 {
 	const int PW = 24, PH = 33; // Player sprite width and height
-	const int PS = 8; // Player animation speed
+	const int PS = 7; // Player animation speed
 	defineTexture("player_left_0" , "res/player.bmp", PW * 0, 0, PW, PH);
 	defineTexture("player_left_1" , "res/player.bmp", PW * 1, 0, PW, PH);
 	defineTexture("player_left_2" , "res/player.bmp", PW * 2, 0, PW, PH);
