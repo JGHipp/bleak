@@ -5,7 +5,7 @@ Default tilemap loaded is level/default.data.
 # Controls
 <pre>
 Arrow Keys	- Move the player
-Z			- Jump
+Z		- Jump
 </pre>
 # Gallery
 ![Screenshot](https://raw.githubusercontent.com/JGHipp/bleak/master/screenshots/1.png)
