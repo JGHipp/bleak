@@ -3,7 +3,7 @@ An SDL2 application written in C++ by John Hippisley, July 2020 <br/>
 Default tilemap loaded is level/default.data.
 # Usage
 Linux/Mac: <pre> ./build [-f &lt;target FPS&gt; ] </pre> <br/>
-Windows: <pre> start build [-f &lt;target FPS&gt; ] </pre> <br/>
+Windows: <pre> start build.exe [-f &lt;target FPS&gt; ] </pre> <br/>
 <i> Note: </i> FPS is 60 by default. <br/>
 # Controls
 <pre>
