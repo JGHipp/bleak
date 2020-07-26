@@ -1,6 +1,7 @@
 #ifndef Engine_H
 #define Engine_H
 
+#include "util/Log.hpp"
 #include "ui/Keyboard.hpp"
 #include "gfx/Graphics.hpp"
 #include "level/Tilemap.hpp"

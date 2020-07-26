@@ -36,6 +36,7 @@ void Player::update(Keyboard* keyboard, Tilemap* tilemap)
 	else runningTime++;
 	/* */if(pdx < 0) facing = 0;
 	else if(pdx > 0) facing = 1;
+	// Update animation
 	/* */if(pdx == 0 && facing == 1) walkingRightAnimation->setFrame(0);
 	else if(pdx == 0 && facing == 0) walkingLeftAnimation->setFrame(0);
 	updatePosition(tilemap);
@@ -51,8 +52,6 @@ void Player::update(Keyboard* keyboard, Tilemap* tilemap)
 	} 
 	/* */if(facing == 1 && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) 	walkingRightAnimation->update();
 	else if(facing == 0 && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) 	walkingLeftAnimation->update();
-	/* */if(facing == 1 && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) 		walkingRightAnimation->setFrame(2);
-	else if(facing == 0 && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) 		walkingLeftAnimation->setFrame(2);
 }
 
 // Collision was hell to figure out. Took 7 hours to finally get right. 
@@ -120,7 +119,10 @@ void Player::updatePosition(Tilemap* tilemap) // Override
 void Player::render(Graphics* graphics, Camera* camera)
 {
 	Texture* texture;
-	if((!attemptingMove || runningTime < ANIM_MIN_RUN_TIME) && isOnGround() && groundTime > ANIM_MIN_GROUND_TIME) 
+	// Determine which texture to draw
+	if(isFacingRight() && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) texture = getTexture("player_right_jump");
+	else if(isFacingLeft() && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) texture = getTexture("player_left_jump");
+	else if((!attemptingMove || runningTime < ANIM_MIN_RUN_TIME) && isOnGround()/* && groundTime > ANIM_MIN_GROUND_TIME*/) 
 		texture = (isFacingRight() ? getTexture("player_right_stand") : getTexture("player_left_stand"));
 	else texture = (isFacingRight() ? walkingRightAnimation->getCurrentFrame() : walkingLeftAnimation->getCurrentFrame());
 	graphics->drawTexture(texture, getX(), getY(), 0xFF00FF, camera);

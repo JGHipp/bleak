@@ -11,24 +11,26 @@ void initTextureAtlas()
 {
 	const int PW = 24, PH = 33; // Player sprite width and height
 	const int PS = 7; // Player animation speed
-	defineTexture("player_left_0" , "res/player.bmp", PW * 0, 0, PW, PH);
-	defineTexture("player_left_1" , "res/player.bmp", PW * 1, 0, PW, PH);
-	defineTexture("player_left_2" , "res/player.bmp", PW * 2, 0, PW, PH);
-	defineTexture("player_left_3" , "res/player.bmp", PW * 3, 0, PW, PH);
-	defineTexture("player_left_4" , "res/player.bmp", PW * 4, 0, PW, PH);
-	defineTexture("player_left_5" , "res/player.bmp", PW * 5, 0, PW, PH);
-	defineTexture("player_left_stand", "res/player.bmp", PW * 6, 0, PW, PH);
-	defineAnimation("player_walking_left", PS, 6, "player_left_1", "player_left_2",  
-		"player_left_3", "player_left_4", "player_left_5", "player_left_0");
-	defineTexture("player_right_0", "res/player.bmp", PW * 0, PH, PW, PH);
-	defineTexture("player_right_1", "res/player.bmp", PW * 1, PH, PW, PH);
-	defineTexture("player_right_2", "res/player.bmp", PW * 2, PH, PW, PH);
-	defineTexture("player_right_3", "res/player.bmp", PW * 3, PH, PW, PH);
-	defineTexture("player_right_4", "res/player.bmp", PW * 4, PH, PW, PH);
-	defineTexture("player_right_5", "res/player.bmp", PW * 5, PH, PW, PH);
-	defineTexture("player_right_stand", "res/player.bmp", PW * 6, PH, PW, PH);
-	defineAnimation("player_walking_right", PS, 6, "player_right_1", "player_right_2", 
-		"player_right_3", "player_right_4", "player_right_5", "player_right_0");
+	defineTexture("player_left_stand", "res/player.bmp", PW * 7, 0, PW, PH);
+	defineTexture("player_left_jump", "res/player.bmp", PW * 3, 0, PW, PH);
+	defineTexture("player_left_0", "res/player.bmp", PW * 5, 0, PW, PH);
+	defineTexture("player_left_1", "res/player.bmp", PW * 4, 0, PW, PH);
+	defineTexture("player_left_2", "res/player.bmp", PW * 3, 0, PW, PH);
+	defineTexture("player_left_3", "res/player.bmp", PW * 2, 0, PW, PH);
+	defineTexture("player_left_4", "res/player.bmp", PW * 1, 0, PW, PH);
+	defineTexture("player_left_5", "res/player.bmp", PW * 0, 0, PW, PH);
+	defineAnimation("player_walking_left", PS, 6, "player_left_0", "player_left_1",  
+		"player_left_2", "player_left_3", "player_left_4", "player_left_5");
+	defineTexture("player_right_stand", "res/player.bmp", PW * 7, PH, PW, PH);
+	defineTexture("player_right_jump", "res/player.bmp", PW * 3, PH, PW, PH);
+	defineTexture("player_right_0", "res/player.bmp", PW * 5, PH, PW, PH);
+	defineTexture("player_right_1", "res/player.bmp", PW * 4, PH, PW, PH);
+	defineTexture("player_right_2", "res/player.bmp", PW * 3, PH, PW, PH);
+	defineTexture("player_right_3", "res/player.bmp", PW * 2, PH, PW, PH);
+	defineTexture("player_right_4", "res/player.bmp", PW * 1, PH, PW, PH);
+	defineTexture("player_right_5", "res/player.bmp", PW * 0, PH, PW, PH);
+	defineAnimation("player_walking_right", PS, 6, "player_right_0", "player_right_1",
+		"player_right_2", "player_right_3", "player_right_4", "player_right_5");
 }
 
 void cleanupTextureAtlas()

@@ -2,7 +2,6 @@
 	Written by John Gustav Hippisley
 */
 #include "Engine.hpp"
-#include "util/Log.hpp"
 #include <iostream>
 #include <string>		// std::string
 #include <chrono> 		// std::chrono
@@ -18,7 +17,7 @@ const std::string VERSION = "PreAlpha v1.0";
 
 Engine::Engine(double targetFPS): targetFPS(targetFPS), updates(0)
 {
-	log("Bleak %s", VERSION.c_str());
+	log("Bleak %s running at %i FPS", VERSION.c_str(), (int) targetFPS);
 }
 
 void Engine::run()
