@@ -17,7 +17,7 @@ const int Y_PADDING = 2;
 // Physics constants
 const double ACCELERATION = 0.1;
 const double DECCELERATION = 0.1;
-const double MAX_SPEED = 1.15;
+const double MAX_SPEED = 1.5;
 const double JUMP_VELOCITY = 3.45;
 const double TERMINAL_VELOCITY = 2.25;
 const double GRAVITATIONAL_ACCELERATION = 0.125;
