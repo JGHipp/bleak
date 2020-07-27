@@ -4,6 +4,7 @@
 #include "../level/Camera.hpp"
 #include "../util/JMath.hpp"
 #include "Texture.hpp"
+#include <string>
 #include <SDL2/SDL.h>
 
 typedef Uint32 u32;
@@ -15,7 +16,7 @@ class Graphics
 		SDL_Surface* imageSurface;  // What we draw to
 	public:
 		Texture* renderBuffer;		// Texture object representing imageSurface
-		double windowScale;
+		double windowScale, bufferWidth, bufferHeight;
 		Graphics(int width, int height, double scale, const char* windowTitle);
 		~Graphics();
 		void updateWindow();
@@ -37,6 +38,8 @@ class Graphics
 		void drawTexture(Texture* texture, double xPos, double yPos, Camera* camera);
 		void drawTexture(Texture* texture, int xPos, int yPos, u32 transparent);
 		void drawTexture(Texture* texture, double xPos, double yPos, u32 transparent, Camera* camera);
+		void drawText(std::string text, int xPos, int yPos, u32 color);
+		void drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera);
 };
 
 #endif

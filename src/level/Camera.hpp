@@ -6,12 +6,12 @@
 class Camera: public Entity
 {
 	private:
-		double focusX, focusY, lerp;
-		int centerX, centerY;
-		int mode; // 0 for static mode, 1 for delta mode, 2 for focus point mode
+		double focusX = 0, focusY = 0, lerp;
+		int centerX = 0, centerY = 0;
 	public:
 		Camera(int centerX, int centerY);
-		void setMode(int mode);
+		enum mode_t { CAM_STATIC, CAM_DELTA, CAM_FOCUSPOINT } mode;
+		void setMode(mode_t mode);
 		void update();
 		int transformX(double x);
 		int transformY(double y);

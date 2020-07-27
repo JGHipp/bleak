@@ -3,13 +3,13 @@
 Entity::Entity(double x, double y, double dx, double dy, double width, double height): x(x), y(y), dx(dx), dy(dy), width(width), height(height)
 {}
 
-Entity::Entity(double x, double y, double width, double height): x(x), y(y), dx(0), dy(0), width(width), height(height)
+Entity::Entity(double x, double y, double width, double height): x(x), y(y), width(width), height(height)
 {}
 
-Entity::Entity(double x, double y): x(x), y(y), dx(0), dy(0), width(0), height(0)
+Entity::Entity(double x, double y): x(x), y(y)
 {}
 
-Entity::Entity(): x(0), y(0), dx(0), dy(0)
+Entity::Entity()
 {}
 
 void Entity::setPosition(double x, double y)

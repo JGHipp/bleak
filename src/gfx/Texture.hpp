@@ -18,7 +18,7 @@ class Texture
 		Texture(const char* pathToImage);
 		Texture(const char* pathToImage, int xPos, int yPos, int cropWidth, int Height);
 		~Texture();
-		int width, height;
+		int width = 0, height = 0;
 		u32* pixels;
 		Texture* crop(int x, int y, int width, int height);
 		u32* getPixels();

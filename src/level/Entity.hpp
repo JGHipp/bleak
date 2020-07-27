@@ -6,7 +6,7 @@
 class Entity
 {
 	private:
-		double x, y, dx, dy, width, height;
+		double x = 0, y = 0, dx = 0, dy = 0, width = 0, height = 0;
 	public: 
 		Entity(double x, double y, double dx, double dy, double width, double height);
 		Entity(double x, double y, double width, double height);

@@ -23,16 +23,16 @@ const double TERMINAL_VELOCITY = 2.75;
 const double GRAVITATIONAL_ACCELERATION = 0.125;
 // Animation constants
 const int ANIM_MIN_RUN_TIME = 8;
-const int ANIM_MIN_GROUND_TIME = 3;
+const int ANIM_MIN_GROUND_TIME = 0;
 const int ANIM_MIN_AIR_TIME = 3;
 
 class Player: public Entity
 {
 	private:	
-		bool onGround, attemptingMove;
-		int facing;
-		long runningTime, groundTime, airTime;
-		double pdx, pdy; // Dx and Dy before collision handling
+		bool onGround = false, attemptingMove = false;
+		enum facing_t { FACING_LEFT, FACING_RIGHT } facing = FACING_RIGHT;
+		long runningTime = 0, groundTime = 0, airTime = 0;
+		double pdx = 0.0, pdy = 0.0; // Dx and Dy before collision handling
 		Animation* walkingRightAnimation, *walkingLeftAnimation;
 		std::vector<Rectangle*> getCollidingRecs(Tilemap* tilemap);
 		void checkLeftCollision(Rectangle delta, Rectangle* tile);

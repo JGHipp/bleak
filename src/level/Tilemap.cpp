@@ -6,7 +6,7 @@
 #include <fstream>	// std::ifstream, ...
 #include <sstream>	// std::stringstream
 
-Tilemap::Tilemap(int tileSize, const char* textureFile, const char* metadataFile): width(0), height(0), tileSize(tileSize)
+Tilemap::Tilemap(int tileSize, const char* textureFile, const char* metadataFile): tileSize(tileSize)
 {
 	tilemapTexture = new Texture(textureFile);
 	loadTileData(metadataFile);
@@ -18,7 +18,7 @@ Tilemap::~Tilemap()
 	delete tilemapTexture;
 	delete[] tileData;
 	delete[] solidData;
-	delete[] foregroundData;
+	delete[] layerData;
 	delete[] tileTextures;
 }
 
@@ -62,7 +62,8 @@ void Tilemap::loadTileData(const char* pathToTileData)
 	std::ifstream readFile(pathToTileData);
 	if(!readFile.is_open()) error("Error reading tile data from '%s'", pathToTileData);
 	std::string line;
-	std::vector<bool> solid, foreground;
+	std::vector<solid_t> solid;
+	std::vector<layer_t> foreground;
 	while(std::getline(readFile, line))
 	{
 		std::vector<std::string> tokens;
@@ -76,18 +77,18 @@ void Tilemap::loadTileData(const char* pathToTileData)
 		solid.push_back(tokens.at(0).compare("true") == 0 ? TILE_SOLID : TILE_PASSABLE);	
 		foreground.push_back(tokens.at(1).compare("true") == 0 ? TILE_FOREGROUND : TILE_BACKGROUND);
 	} 
-	solidData = new bool[solid.size()];
-	foregroundData = new bool[foreground.size()];
+	solidData = new solid_t[solid.size()];
+	layerData = new layer_t[foreground.size()];
 	std::copy(solid.begin(), solid.end(), solidData);
-	std::copy(foreground.begin(), foreground.end(), foregroundData);
+	std::copy(foreground.begin(), foreground.end(), layerData);
 }
 
-void Tilemap::render(Graphics* graphics, Camera* camera, bool layer)
+void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)
 {
 	// Only render the tiles that are in the view of the camera
 	const int padding = 4;
-	int nRowTiles = graphics->renderBuffer->width / tileSize;
-	int nColTiles = graphics->renderBuffer->height / tileSize;
+	int nRowTiles = graphics->bufferWidth / tileSize;
+	int nColTiles = graphics->bufferHeight / tileSize;
 	int x1 = clamp((int) camera->getFocusX() / tileSize - (nRowTiles / 2) - padding, 0, width);
 	int x2 = clamp((int) camera->getFocusX() / tileSize + (nRowTiles / 2) + padding, 0, width);
 	int y1 = clamp((int) camera->getFocusY() / tileSize - (nColTiles / 2) - padding, 0, height);
@@ -95,7 +96,8 @@ void Tilemap::render(Graphics* graphics, Camera* camera, bool layer)
 	for(int x = x1; x <= x2; x++)
 	{
 		for(int y = y1; y <= y2; y++)
-			if(isInForeground(x, y) == layer) graphics->drawTexture(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, 0xFF00FF, camera);
+			if((isInForeground(x, y) && layer == TILE_FOREGROUND) || (!isInForeground(x, y) && layer == TILE_BACKGROUND)) 
+				graphics->drawTexture(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, 0xFF00FF, camera);
 	}
 }
 
@@ -134,8 +136,8 @@ int Tilemap::getTileId(int x, int y)
 
 Rectangle* Tilemap::getTileRectangle(int x, int y) 
 { return new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize); }
-bool Tilemap::isSolid(int id) { return solidData[id]; }
-bool Tilemap::isSolid(int x, int y) { return solidData[getTileId(x, y)]; }
-bool Tilemap::isInForeground(int id) { return foregroundData[id]; }
-bool Tilemap::isInForeground(int x, int y) { return foregroundData[getTileId(x, y)]; }
+bool Tilemap::isSolid(int id) { return (solidData[id] == TILE_SOLID); }
+bool Tilemap::isSolid(int x, int y) { return (solidData[getTileId(x, y)] == TILE_SOLID); }
+bool Tilemap::isInForeground(int id) { return (layerData[id] == TILE_FOREGROUND); }
+bool Tilemap::isInForeground(int x, int y) { return (layerData[getTileId(x, y)] == TILE_FOREGROUND); }
 bool Tilemap::tileInRange(int x, int y) { return (x >= 0 && y >= 0 && x < width && y < height); }

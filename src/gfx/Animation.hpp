@@ -7,10 +7,11 @@
 class Animation
 {
 	private:
-		int frame, nFrames, ticks, ticksPerFrame;
+		int frame = 0, nFrames = 0, ticks = 0, ticksPerFrame = 0;
 		Texture** textures;
 	public:
 		Animation(std::vector<Texture*> textures, int ticksPerFrame);
+		Animation(const Animation& original); // Copy constructor
 		~Animation();
 		Animation* getCopy();
 		Texture* getCurrentFrame();	

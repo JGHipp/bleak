@@ -4,30 +4,24 @@
 #include "util/Log.hpp"
 #include "ui/Keyboard.hpp"
 #include "gfx/Graphics.hpp"
+#include "gfx/Textbox.hpp"
 #include "level/Tilemap.hpp"
 #include "level/Camera.hpp"
 #include "level/Player.hpp"
 
-class Engine
+// Declare all Engine:: items used by other files
+namespace Engine
 {
-	private:
-		bool running;
-		double targetFPS;
-		long long updates;
-		Graphics* graphics;
-		Keyboard* keyboard;
-		Tilemap* tilemap;
-		Camera* camera;
-		Player* player;
-		void update();
-		void render();
-		void init();
-		long long unsigned int milisecondsSinceEpoch();
-	public:
-		Engine(double targetFPS);
-		void run();
-		void exit();
-		long long updatesSinceStart();	
+	extern Graphics* graphics;
+	extern Textbox* textbox;
+	extern Keyboard* keyboard;
+	extern Tilemap* tilemap;
+	extern Camera* camera;
+	extern Player* player;
+	extern long long unsigned int milisecondsSinceEpoch();
+	extern void run(int targetFPS);
+	extern void exit();
+	extern long long updatesSinceStart();	
 };
 
 #endif

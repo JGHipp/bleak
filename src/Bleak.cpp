@@ -27,7 +27,6 @@ int main(int argc, char* argv[])
 	{
 		if(options.at(i).compare("-F") == 0)  fps = atoi(data.at(i).c_str());
 	}
-	Engine engine(fps);
-	engine.run();
+	Engine::run(fps);
 	return 0;
 }

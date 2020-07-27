@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-g -lSDL2
+CFLAGS=-g -lSDL2 -Wall
 FILES=$(shell find src -name "*.cpp")
 EXEC=build
 

@@ -2,14 +2,12 @@
 #include "../gfx/TextureAtlas.hpp"
 #include <iostream>
 
-Player::Player(double x, double y): Entity(x, y, PLAYER_WIDTH, PLAYER_HEIGHT), 
-	onGround(false), attemptingMove(false), facing(1), runningTime(0), airTime(0)
+Player::Player(double x, double y): Entity(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
 {	
 	loadTextures();
 }
 
-Player::Player(): Entity(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT), 
-	onGround(false), attemptingMove(false), facing(1), runningTime(0), airTime(0)
+Player::Player(): Entity(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT)
 {
 	loadTextures();
 }
@@ -34,11 +32,11 @@ void Player::update(Keyboard* keyboard, Tilemap* tilemap)
 	pdy = getDy();
 	if(pdx == 0) runningTime = 0;
 	else runningTime++;
-	/* */if(pdx < 0) facing = 0;
-	else if(pdx > 0) facing = 1;
+	/* */if(pdx < 0) facing = FACING_LEFT;
+	else if(pdx > 0) facing = FACING_RIGHT;
 	// Update animation
-	/* */if(pdx == 0 && facing == 1) walkingRightAnimation->setFrame(0);
-	else if(pdx == 0 && facing == 0) walkingLeftAnimation->setFrame(0);
+	/* */if(pdx == 0 && facing == FACING_RIGHT) walkingRightAnimation->setFrame(0);
+	else if(pdx == 0 && facing == FACING_LEFT) walkingLeftAnimation->setFrame(0);
 	updatePosition(tilemap);
 	if(isOnGround())
 	{
@@ -50,8 +48,8 @@ void Player::update(Keyboard* keyboard, Tilemap* tilemap)
 		airTime++;
 		groundTime = 0;	
 	} 
-	/* */if(facing == 1 && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) 	walkingRightAnimation->update();
-	else if(facing == 0 && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) 	walkingLeftAnimation->update();
+	/* */if(facing == FACING_RIGHT && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) walkingRightAnimation->update();
+	else if(facing == FACING_LEFT && isOnGround() && groundTime >= ANIM_MIN_GROUND_TIME) walkingLeftAnimation->update();
 }
 
 // Collision was hell to figure out. Took 7 hours to finally get right. 
@@ -122,7 +120,7 @@ void Player::render(Graphics* graphics, Camera* camera)
 	// Determine which texture to draw
 	if(isFacingRight() && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) texture = getTexture("player_right_jump");
 	else if(isFacingLeft() && !isOnGround() && airTime >= ANIM_MIN_AIR_TIME) texture = getTexture("player_left_jump");
-	else if((!attemptingMove || runningTime < ANIM_MIN_RUN_TIME) && isOnGround()/* && groundTime > ANIM_MIN_GROUND_TIME*/) 
+	else if((!attemptingMove || runningTime < ANIM_MIN_RUN_TIME) && isOnGround() && groundTime > ANIM_MIN_GROUND_TIME) 
 		texture = (isFacingRight() ? getTexture("player_right_stand") : getTexture("player_left_stand"));
 	else texture = (isFacingRight() ? walkingRightAnimation->getCurrentFrame() : walkingLeftAnimation->getCurrentFrame());
 	graphics->drawTexture(texture, getX(), getY(), 0xFF00FF, camera);
@@ -160,6 +158,6 @@ void Player::applyGravity()
 	if(isOnGround()) setDy(GRAVITATIONAL_ACCELERATION);
 }
 
-bool Player::isFacingRight() { return facing; }
-bool Player::isFacingLeft() { return !facing; }
+bool Player::isFacingRight() { return (facing == FACING_RIGHT); }
+bool Player::isFacingLeft() { return (facing == FACING_LEFT); }
 bool Player::isOnGround() { return onGround; }

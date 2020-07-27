@@ -1,11 +1,14 @@
 #include "Animation.hpp"
 
-Animation::Animation(std::vector<Texture*> frames, int ticksPerFrame): frame(0), nFrames((int) frames.size()), ticks(0), 
-	ticksPerFrame(ticksPerFrame)
+Animation::Animation(std::vector<Texture*> frames, int ticksPerFrame): nFrames((int) frames.size()), ticksPerFrame(ticksPerFrame)
 {
 	textures = new Texture*[frames.size()];
     for (int i = 0; i < nFrames; i++) textures[i] = frames.at(i);
 }
+
+Animation::Animation(const Animation& original): frame(original.frame), nFrames(original.nFrames), ticks(original.ticks),
+	ticksPerFrame(original.ticksPerFrame), textures(original.textures)
+{}
 
 Animation::~Animation()
 {
@@ -14,10 +17,7 @@ Animation::~Animation()
 
 Animation* Animation::getCopy()
 {
-	std::size_t size = sizeof(*this);
-	Animation* copy = (Animation*) malloc(size);
-	memcpy(copy, this, size);
-	return copy;
+	return new Animation(*this);
 }
 
 Texture* Animation::getFrame(int index)

@@ -7,17 +7,17 @@ Camera::Camera(int centerX, int centerY): Entity(), lerp(1.0), centerX(centerX),
 
 void Camera::update()
 {
-	if(mode == 2) // Focus point mode
+	if(mode == CAM_FOCUSPOINT) // Focus point mode
 	{
 		setX(getX() + ((focusX - centerX) - getX()) * lerp);
 		setY(getY() + ((focusY - centerY) - getY()) * lerp);
 	}
-	else if(mode == 0) // Static mode
+	else if(mode == CAM_STATIC) // Static mode
 	{
 		setX(focusX - centerX);
 		setY(focusY - centerY);
 	}
-	else if(mode == 1) // Normal mode
+	else if(mode == CAM_DELTA) // Delta mode
 	{
 		setFocusPoint(focusX + getDx(), focusY + getDy());
 		setX(focusX - centerX);
@@ -57,5 +57,5 @@ void Camera::setCenter(int centerX, int centerY)
 double Camera::getFocusX() { return focusX; }
 double Camera::getFocusY() { return focusY; }
 double Camera::getLerp() { return lerp; }
-void Camera::setMode(int mode) { this->mode = mode; }
+void Camera::setMode(mode_t mode) { this->mode = mode; }
 void Camera::setLerp(double lerp) { this->lerp = lerp; }

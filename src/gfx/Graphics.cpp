@@ -1,7 +1,8 @@
 #include "Graphics.hpp"
 #include <iostream>
 
-Graphics::Graphics(int width, int height, double scale, const char* windowTitle): windowScale(scale)
+Graphics::Graphics(int width, int height, double scale, const char* windowTitle): 
+	windowScale(scale), bufferWidth(width), bufferHeight(height)
 {
 	window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width * scale, height * scale, 0);
     windowSurface = SDL_GetWindowSurface(window);
@@ -137,3 +138,11 @@ void Graphics::drawTexture(Texture* texture, int xPos, int yPos, u32 transparent
 
 void Graphics::drawTexture(Texture* texture, double xPos, double yPos, u32 transparent, Camera* camera)
 { drawTexture(texture, camera->transformX(xPos), camera->transformY(yPos), transparent); }
+
+void Graphics::drawText(std::string text, int xPos, int yPos, u32 color)
+{
+	std::cout << "drawing " << text <<  std::endl;
+}
+
+void Graphics::drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera)
+{ drawText(text, camera->transformX(xPos), camera->transformY(yPos), color); }
