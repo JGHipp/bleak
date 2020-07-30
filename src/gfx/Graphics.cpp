@@ -1,4 +1,5 @@
 #include "Graphics.hpp"
+#include "TextureAtlas.hpp"
 #include <iostream>
 
 Graphics::Graphics(int width, int height, double scale, const char* windowTitle): 
@@ -10,6 +11,17 @@ Graphics::Graphics(int width, int height, double scale, const char* windowTitle)
    	SDL_SetSurfaceBlendMode(windowSurface, SDL_BLENDMODE_NONE);
     SDL_SetSurfaceBlendMode(imageSurface, SDL_BLENDMODE_NONE);
 	renderBuffer = new Texture(imageSurface);
+	// Initialize character map
+	Texture* fontBitmap = getTexture("font_map");
+	std::vector<Texture*>* characters = new std::vector<Texture*>;
+	int nCols = (fontBitmap->width / CHARACTER_WIDTH), nRows = (fontBitmap->height / CHARACTER_HEIGHT);
+	for(int i = 0; i < nRows * nCols; i++)
+	{
+		int y = i / nCols;
+		int x = i % nCols;
+		characters->push_back(fontBitmap->crop(x * CHARACTER_WIDTH, y * CHARACTER_HEIGHT, CHARACTER_WIDTH, CHARACTER_HEIGHT));
+	}
+	characterBitmap = characters->data();
 }
 
 Graphics::~Graphics()
@@ -141,7 +153,13 @@ void Graphics::drawTexture(Texture* texture, double xPos, double yPos, u32 trans
 
 void Graphics::drawText(std::string text, int xPos, int yPos, u32 color)
 {
-	std::cout << "drawing " << text <<  std::endl;
+	for(int i = 0; i < (int) text.length(); i++)
+	{
+		Texture* character = characterBitmap[(int) text.at(i)]->crop(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT);
+		for(int i = 0; i < character->width * character->height; i++)
+			if(character->pixels[i] == CHARACTER_SOLID) character->pixels[i] = color;
+		drawTexture(character, xPos + i * CHARACTER_WIDTH, yPos, CHARACTER_TRANSPARENT);	
+	}
 }
 
 void Graphics::drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera)

@@ -1,5 +1,6 @@
 #include "Tilemap.hpp"
 #include "../gfx/Texture.hpp"
+#include "../gfx/TextureAtlas.hpp"
 #include "../util/JMath.hpp"
 #include "../util/Log.hpp"
 #include <iostream>
@@ -8,7 +9,7 @@
 
 Tilemap::Tilemap(int tileSize, const char* textureFile, const char* metadataFile): tileSize(tileSize)
 {
-	tilemapTexture = new Texture(textureFile);
+	tilemapTexture = getTexture(std::string(textureFile));
 	loadTileData(metadataFile);
 	init();
 }
@@ -25,14 +26,14 @@ Tilemap::~Tilemap()
 void Tilemap::init()
 {
 	// Load texture for each tile
-	int nTiles = (tilemapTexture->width / tileSize) * (tilemapTexture->height / tileSize);
-	for(int id = 0; id < nTiles; id++)
+	int nRows = (tilemapTexture->height / tileSize), nCols = (tilemapTexture->width / tileSize);
+	for(int id = 0; id < nRows * nCols; id++)
 	{
-		int tilePosX = id % tileSize;
-		int tilePosY = id / tileSize; 
+		int tilePosX = id % nCols;
+		int tilePosY = id / nCols; 
 		Texture* croppedTile = tilemapTexture->crop(tilePosX * tileSize, tilePosY * tileSize, tileSize, tileSize);
 		// Initialize the tileTextures array assuming all tiles are equal size
-		if(id == 0) tileTextures = new Texture*[nTiles];
+		if(id == 0) tileTextures = new Texture*[nRows * nCols];
 		tileTextures[id] = croppedTile;
 	}
 }
@@ -62,8 +63,8 @@ void Tilemap::loadTileData(const char* pathToTileData)
 	std::ifstream readFile(pathToTileData);
 	if(!readFile.is_open()) error("Error reading tile data from '%s'", pathToTileData);
 	std::string line;
-	std::vector<solid_t> solid;
-	std::vector<layer_t> foreground;
+	std::vector<solid_t>* solid = new std::vector<solid_t>;
+	std::vector<layer_t>* foreground = new std::vector<layer_t>;
 	while(std::getline(readFile, line))
 	{
 		std::vector<std::string> tokens;
@@ -74,13 +75,11 @@ void Tilemap::loadTileData(const char* pathToTileData)
     	    getline(stream, token, ','); 
     	    tokens.push_back(token); 
     	} 
-		solid.push_back(tokens.at(0).compare("true") == 0 ? TILE_SOLID : TILE_PASSABLE);	
-		foreground.push_back(tokens.at(1).compare("true") == 0 ? TILE_FOREGROUND : TILE_BACKGROUND);
+		solid->push_back(tokens.at(0).compare("true") == 0 ? TILE_SOLID : TILE_PASSABLE);	
+		foreground->push_back(tokens.at(1).compare("true") == 0 ? TILE_FOREGROUND : TILE_BACKGROUND);
 	} 
-	solidData = new solid_t[solid.size()];
-	layerData = new layer_t[foreground.size()];
-	std::copy(solid.begin(), solid.end(), solidData);
-	std::copy(foreground.begin(), foreground.end(), layerData);
+	solidData = solid->data();
+	layerData = foreground->data();
 }
 
 void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)

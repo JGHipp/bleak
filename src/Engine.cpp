@@ -18,7 +18,7 @@ namespace Engine
 	// Constants
 	const std::string VERSION		= "PreAlpha v1.1";
 	const char* PATH_TILE_METADATA	= "res/tile_mdata.data";
-	const char* PATH_TILESHEET		= "res/tilesheet.bmp";
+	const char* ID_TILESHEET		= "tile_sheet";
 	const char* PATH_DEFAULT_MAP	= "level/default.data";
 	const int GFX_WIDTH		= 480;
 	const int GFX_HEIGHT	= 280;
@@ -28,7 +28,7 @@ namespace Engine
 	
 	bool running;
 	long long updates;
-	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL;
+	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL_TB;
 	Graphics* graphics;
 	Textbox* textbox;
 	Keyboard* keyboard;
@@ -44,7 +44,7 @@ namespace Engine
     		if(event.type == SDL_QUIT) running = false;
     		keyboard->update(event);
 		}
-		if(gameMode == GM_NORMAL)
+		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
 			player->update(keyboard, tilemap);
 			camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
@@ -75,8 +75,8 @@ namespace Engine
 		keyboard = new Keyboard();
 		graphics = new Graphics(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
 		textbox = new Textbox(Textbox::TB_STATIC);
-		textbox->setBuffer("The quick brown fox jumped over the lazy dog. 0123456789!@#$%^&*()");
-		tilemap = new Tilemap(TM_TILESIZE, PATH_TILESHEET, PATH_TILE_METADATA);
+		textbox->setBuffer("The quick brown fox jumped over the lazy dog.");
+		tilemap = new Tilemap(TM_TILESIZE, ID_TILESHEET, PATH_TILE_METADATA);
 		tilemap->loadData(PATH_DEFAULT_MAP);
 		player = new Player(20, 20);	
 		camera = new Camera(graphics->bufferWidth / 2, graphics->bufferHeight / 2);

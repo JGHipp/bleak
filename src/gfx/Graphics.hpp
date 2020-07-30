@@ -38,6 +38,9 @@ class Graphics
 		void drawTexture(Texture* texture, double xPos, double yPos, Camera* camera);
 		void drawTexture(Texture* texture, int xPos, int yPos, u32 transparent);
 		void drawTexture(Texture* texture, double xPos, double yPos, u32 transparent, Camera* camera);
+		const int CHARACTER_WIDTH = 8, CHARACTER_HEIGHT = 8;
+		const u32 CHARACTER_TRANSPARENT = 0xFF00FF, CHARACTER_SOLID = 0xFFFFFF;
+		Texture** characterBitmap;
 		void drawText(std::string text, int xPos, int yPos, u32 color);
 		void drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera);
 };

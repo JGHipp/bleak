@@ -16,7 +16,7 @@ class Tilemap
 	public: 
 		enum solid_t { TILE_PASSABLE, TILE_SOLID }* solidData;
 		enum layer_t { TILE_BACKGROUND, TILE_FOREGROUND }* layerData;
-		Tilemap(int tileSize, const char* textureFile, const char* metadataFile);
+		Tilemap(int tileSize, const char* textureId, const char* metadataFile);
 		~Tilemap();
 		int width = 0, height = 0, tileSize;
 		void init();

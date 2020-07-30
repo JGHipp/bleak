@@ -13,8 +13,9 @@ void initTextureAtlas();
 void cleanupTextureAtlas();
 void addTextureToAtlas(Texture* texture, std::string id);
 void addAnimationToAtlas(Animation* animation, std::string id);
-#define defineTexture(id, path, x, y, width, height) addTextureToAtlas(new Texture(path, x, y, width, height), id)
-void defineAnimation(std::string id, int ticksPerFrame, int nFrames, ...); // Can't do with pre-processor :(
+inline void defineTexture(std::string id, const char* path);
+inline void defineTexture(std::string id, const char* path, int x, int y, int width, int height);
+inline void defineAnimation(std::string id, int ticksPerFrame, int nFrames, ...);
 Texture* getTexture(std::string id);
 Animation* getAnimation(std::string id);
 
