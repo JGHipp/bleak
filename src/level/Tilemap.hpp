@@ -29,8 +29,8 @@ class Tilemap
 		bool isSolid(int x, int y);
 		bool isInForeground(int id);
 		bool isInForeground(int x, int y);
-		Rectangle* getTileRectangle(int x, int y);
-		std::vector<Rectangle*> getRectanglesSurrounding(int x, int y); 
+		Rectangle getTileRectangle(int x, int y);
+		std::vector<Rectangle> getRectanglesSurrounding(int x, int y); 
 };
 
 #endif

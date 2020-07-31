@@ -15,6 +15,8 @@ class Graphics
 		SDL_Surface* windowSurface; // imageSurface gets drawn to this and scaled
 		SDL_Surface* imageSurface;  // What we draw to
 	public:
+		const int CHARACTER_WIDTH = 8, CHARACTER_HEIGHT = 8;
+		const u32 TRANSPARENT = 0xFF00FF, CHARACTER_SOLID = 0xFFFFFF;
 		Texture* renderBuffer;		// Texture object representing imageSurface
 		double windowScale, bufferWidth, bufferHeight;
 		Graphics(int width, int height, double scale, const char* windowTitle);
@@ -38,8 +40,6 @@ class Graphics
 		void drawTexture(Texture* texture, double xPos, double yPos, Camera* camera);
 		void drawTexture(Texture* texture, int xPos, int yPos, u32 transparent);
 		void drawTexture(Texture* texture, double xPos, double yPos, u32 transparent, Camera* camera);
-		const int CHARACTER_WIDTH = 8, CHARACTER_HEIGHT = 8;
-		const u32 CHARACTER_TRANSPARENT = 0xFF00FF, CHARACTER_SOLID = 0xFFFFFF;
 		Texture** characterBitmap;
 		void drawText(std::string text, int xPos, int yPos, u32 color);
 		void drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera);

@@ -28,15 +28,33 @@ Texture* Animation::getFrame(int index)
 
 void Animation::update()
 {
-	ticks++;
+	if(halting && haltMode == HALT_IMMEDIATE)
+	{
+		stopped = true;
+		halting = false;
+	}
+	if(!stopped) ticks++;
 	if(ticks >= ticksPerFrame)
 	{
 		ticks = 0;
 		frame++;
 		if(frame >= nFrames) frame = 0;
+		if(halting && haltMode == HALT_WAIT_NEXT) 
+		{
+			stopped = true;
+			halting = false;
+		}
 	}
 }
 
+void Animation::halt(halt_t type) 
+{
+	haltMode = type;
+	halting = true;
+}
+
+bool Animation::isHalted() { return stopped; }
+void Animation::unHalt() { stopped = false; }
 void Animation::setFrame(int frame) { this->frame = frame; ticks = 0; }
 Texture* Animation::getCurrentFrame() { return textures[frame]; };
 int Animation::getFrameIndex() { return frame; }

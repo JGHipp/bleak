@@ -96,7 +96,7 @@ void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)
 	{
 		for(int y = y1; y <= y2; y++)
 			if((isInForeground(x, y) && layer == TILE_FOREGROUND) || (!isInForeground(x, y) && layer == TILE_BACKGROUND)) 
-				graphics->drawTexture(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, 0xFF00FF, camera);
+				graphics->drawTexture(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, graphics->TRANSPARENT, camera);
 	}
 }
 
@@ -104,11 +104,11 @@ void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)
 	Returns Rectangle objects for the tile (x, y)
 	lands on, as well as the 8 surrounding tiles
 */
-std::vector<Rectangle*> Tilemap::getRectanglesSurrounding(int x, int y)
+std::vector<Rectangle> Tilemap::getRectanglesSurrounding(int x, int y)
 {
 	int tx = x / tileSize;
 	int ty = y / tileSize;
-	std::vector<Rectangle*> rectangles;
+	std::vector<Rectangle> rectangles;
 	#define tryToAdd(a, b) if(isSolid(a, b)) rectangles.push_back(getTileRectangle(a, b));
 	tryToAdd(tx, ty);
 	tryToAdd(tx - 1, ty - 1); 
@@ -133,8 +133,8 @@ int Tilemap::getTileId(int x, int y)
 	return 0;
 }
 
-Rectangle* Tilemap::getTileRectangle(int x, int y) 
-{ return new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize); }
+Rectangle Tilemap::getTileRectangle(int x, int y) 
+{ return Rectangle(x * tileSize, y * tileSize, tileSize, tileSize); }
 bool Tilemap::isSolid(int id) { return (solidData[id] == TILE_SOLID); }
 bool Tilemap::isSolid(int x, int y) { return (solidData[getTileId(x, y)] == TILE_SOLID); }
 bool Tilemap::isInForeground(int id) { return (layerData[id] == TILE_FOREGROUND); }

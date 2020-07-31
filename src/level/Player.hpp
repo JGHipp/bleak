@@ -23,7 +23,7 @@ const double TERMINAL_VELOCITY = 2.75;
 const double GRAVITATIONAL_ACCELERATION = 0.125;
 // Animation constants
 const int ANIM_MIN_RUN_TIME = 8;
-const int ANIM_MIN_GROUND_TIME = 0;
+const int ANIM_MIN_GROUND_TIME = 3;
 const int ANIM_MIN_AIR_TIME = 3;
 
 class Player: public Entity
@@ -34,13 +34,13 @@ class Player: public Entity
 		long runningTime = 0, groundTime = 0, airTime = 0;
 		double pdx = 0.0, pdy = 0.0; // Dx and Dy before collision handling
 		Animation* walkingRightAnimation, *walkingLeftAnimation;
-		std::vector<Rectangle*> getCollidingRecs(Tilemap* tilemap);
-		void checkLeftCollision(Rectangle delta, Rectangle* tile);
-		void checkRightCollision(Rectangle delta, Rectangle* tile);
-		void checkTopCollision(Rectangle delta, Rectangle* tile);
-		void checkBottomCollision(Rectangle delta, Rectangle* tile);
+		Animation* getCurrentAnimation();
+		void checkLeftCollision(Rectangle delta, Rectangle tile);
+		void checkRightCollision(Rectangle delta, Rectangle tile);
+		void checkTopCollision(Rectangle delta, Rectangle tile);
+		void checkBottomCollision(Rectangle delta, Rectangle tile);
 		void loadTextures();
-		void handleInput(Keyboard* keyboard);
+		void handleInput();
 		void updatePosition(Tilemap* tilemap); // Override
 		void applyGravity();
 	public:	
@@ -51,7 +51,7 @@ class Player: public Entity
 		bool isFacingLeft();
 		bool isOnGround();
 		void jump();
-		void update(Keyboard* keyboard, Tilemap* tilemap);
+		void update(Tilemap* tilemap);
 		void render(Graphics* graphics, Camera* camera);
 };
 

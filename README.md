@@ -1,4 +1,4 @@
-# Bleak Game Engine PreAlpha 1.1
+# Bleak Game Engine PreAlpha 1.2
 An SDL2 application written in C++ by John Hippisley, July 2020 <br/>
 Default tilemap loaded is level/default.data.
 # Usage

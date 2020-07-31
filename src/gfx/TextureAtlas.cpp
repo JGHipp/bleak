@@ -21,8 +21,8 @@ void initTextureAtlas()
 	defineTexture("player_left_3", "res/player.bmp", PW * 3, 0, PW, PH);
 	defineTexture("player_left_4", "res/player.bmp", PW * 4, 0, PW, PH);
 	defineTexture("player_left_5", "res/player.bmp", PW * 5, 0, PW, PH);
-	defineAnimation("player_walking_left", PS, 6, "player_left_0", "player_left_1",  
-		"player_left_2", "player_left_3", "player_left_4", "player_left_5");
+	defineAnimation("player_walking_left", PS, 6, "player_left_3", "player_left_4", // Start at middle frame, looks better
+		"player_left_5", "player_left_0", "player_left_1", "player_left_2");
 	defineTexture("player_right_stand", "res/player.bmp", PW * 7, PH, PW, PH);
 	defineTexture("player_right_jump", "res/player.bmp", PW * 3, PH, PW, PH);
 	defineTexture("player_right_0", "res/player.bmp", PW * 0, PH, PW, PH);
@@ -31,8 +31,8 @@ void initTextureAtlas()
 	defineTexture("player_right_3", "res/player.bmp", PW * 3, PH, PW, PH);
 	defineTexture("player_right_4", "res/player.bmp", PW * 4, PH, PW, PH);
 	defineTexture("player_right_5", "res/player.bmp", PW * 5, PH, PW, PH);
-	defineAnimation("player_walking_right", PS, 6, "player_right_0", "player_right_1",
-		"player_right_2", "player_right_3", "player_right_4", "player_right_5");
+	defineAnimation("player_walking_right", PS, 6, "player_right_3", "player_right_4",
+		"player_right_5", "player_right_0", "player_right_1", "player_right_2");
 }
 
 void cleanupTextureAtlas()

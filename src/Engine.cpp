@@ -16,10 +16,11 @@
 namespace Engine
 {
 	// Constants
-	const std::string VERSION		= "PreAlpha v1.1";
+	const std::string VERSION		= "PreAlpha v1.2";
 	const char* PATH_TILE_METADATA	= "res/tile_mdata.data";
 	const char* ID_TILESHEET		= "tile_sheet";
 	const char* PATH_DEFAULT_MAP	= "level/default.data";
+	const u32 BACKGROUND_COLOR = 0x0d0d0d;
 	const int GFX_WIDTH		= 480;
 	const int GFX_HEIGHT	= 280;
 	const double GFX_SCALE	= 2.0;
@@ -28,35 +29,46 @@ namespace Engine
 	
 	bool running;
 	long long updates;
-	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL_TB;
+	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL;
 	Graphics* graphics;
 	Textbox* textbox;
-	Keyboard* keyboard;
 	Tilemap* tilemap;
 	Camera* camera;
 	Player* player;
 
+	void showTextBox(Textbox::mode_t mode, const char* string)
+	{
+		textbox->setMode(mode);
+		textbox->setBuffer(string);
+		gameMode = GM_NORMAL_TB;
+	}
+
 	void update()
 	{
+		Keyboard::prepareForPoll();
 		SDL_Event event;
 		while(SDL_PollEvent(&event) != 0) // Handle events
 	 	{
     		if(event.type == SDL_QUIT) running = false;
-    		keyboard->update(event);
+    		Keyboard::update(event);
 		}
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
-			player->update(keyboard, tilemap);
 			camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
 			camera->update();
 		}
-		else if(gameMode == GM_NORMAL_TB) textbox->update();
+		if(gameMode == GM_NORMAL) player->update(tilemap);
+		else if(gameMode == GM_NORMAL_TB) 
+		{
+			textbox->update();
+			if(Keyboard::keyPressedThisFrame() && textbox->isCaughtUp() && textbox->mode == Textbox::TB_TYPING) gameMode = GM_NORMAL;
+		}
 	}
 
 	void render()
 	{
 		graphics->clearBuffer();
-		graphics->drawRectangle(0, 0, graphics->renderBuffer->width, graphics->renderBuffer->height, 0x0d0d0d);
+		graphics->drawRectangle(0, 0, graphics->renderBuffer->width, graphics->renderBuffer->height, BACKGROUND_COLOR);
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
 			tilemap->render(graphics, camera, Tilemap::TILE_BACKGROUND);
@@ -65,24 +77,24 @@ namespace Engine
 		}
 		if(gameMode == GM_NORMAL_TB) textbox->render(graphics);
 		graphics->updateWindow();
-	}
+	}	
 
 	void init()
 	{
 		running = true;
 		SDL_Init(SDL_INIT_EVERYTHING);
 		initTextureAtlas(); // Load all textures and animations
-		keyboard = new Keyboard();
 		graphics = new Graphics(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
-		textbox = new Textbox(Textbox::TB_STATIC);
-		textbox->setBuffer("The quick brown fox jumped over the lazy dog.");
+		textbox = new Textbox(Textbox::TB_TYPING);
 		tilemap = new Tilemap(TM_TILESIZE, ID_TILESHEET, PATH_TILE_METADATA);
 		tilemap->loadData(PATH_DEFAULT_MAP);
-		player = new Player(20, 20);	
+		player = new Player(50, 20);	
 		camera = new Camera(graphics->bufferWidth / 2, graphics->bufferHeight / 2);
 		camera->setMode(Camera::CAM_FOCUSPOINT);
 		camera->setLerp(CAM_LERP);
 		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
+		showTextBox(Textbox::TB_TYPING, "\"Whenever I'm about to do something, I think, 'Would an idiot do that?' "
+			"And if they would, I do not do that thing.\"\n         -Dwight K. Schrute :)");
 	}
 
 	void exit()
@@ -90,7 +102,6 @@ namespace Engine
 		log("Terminating");
 		cleanupTextureAtlas();
 		delete graphics;
-		delete keyboard;
 		delete tilemap;
 		delete camera;
 		delete player;

@@ -155,10 +155,10 @@ void Graphics::drawText(std::string text, int xPos, int yPos, u32 color)
 {
 	for(int i = 0; i < (int) text.length(); i++)
 	{
-		Texture* character = characterBitmap[(int) text.at(i)]->crop(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT);
+		Texture* character = characterBitmap[(int) ((unsigned char) text.at(i))]->crop(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 		for(int i = 0; i < character->width * character->height; i++)
 			if(character->pixels[i] == CHARACTER_SOLID) character->pixels[i] = color;
-		drawTexture(character, xPos + i * CHARACTER_WIDTH, yPos, CHARACTER_TRANSPARENT);	
+		drawTexture(character, xPos + i * CHARACTER_WIDTH, yPos, TRANSPARENT);
 	}
 }
 

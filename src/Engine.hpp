@@ -14,7 +14,6 @@ namespace Engine
 {
 	extern Graphics* graphics;
 	extern Textbox* textbox;
-	extern Keyboard* keyboard;
 	extern Tilemap* tilemap;
 	extern Camera* camera;
 	extern Player* player;

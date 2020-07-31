@@ -7,9 +7,11 @@
 class Animation
 {
 	private:
+		bool stopped = false, halting = false;
 		int frame = 0, nFrames = 0, ticks = 0, ticksPerFrame = 0;
 		Texture** textures;
 	public:
+		enum halt_t { HALT_IMMEDIATE, HALT_WAIT_NEXT} haltMode;
 		Animation(std::vector<Texture*> textures, int ticksPerFrame);
 		Animation(const Animation& original); // Copy constructor
 		~Animation();
@@ -19,6 +21,9 @@ class Animation
 		int getFrameIndex();
 		void setFrame(int frame);
 		void update();
+		bool isHalted();
+		void halt(halt_t type);
+		void unHalt();
 };
 
 #endif

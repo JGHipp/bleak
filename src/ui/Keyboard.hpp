@@ -4,15 +4,12 @@
 #include <cstddef>	// size_t
 #include <SDL2/SDL.h>
 
-class Keyboard
+namespace Keyboard
 {
-	private:
-		const static size_t N_KEYS = pow(2, sizeof(SDL_Keycode) * 8) - 1 ;
-		bool keys[N_KEYS];
-	public:
-		Keyboard();
-		bool keyPressed(SDL_Keycode key);
-		void update(SDL_Event& event);
+	extern bool keyPressedThisFrame();
+	extern bool keyPressed(SDL_Keycode key);
+	extern void prepareForPoll();
+	extern void update(SDL_Event& event);
 };
 
 #endif
