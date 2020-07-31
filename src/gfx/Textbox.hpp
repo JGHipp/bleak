@@ -8,9 +8,10 @@ class Textbox
 {
 	private:
 		std::string buffer;
-		int blinkChar = 0, cupdates = 0, bUpdates = 0, nChars = 0;
+		bool paused = false, complete = false;;
+		int blinkChar = 0, cUpdates = 0, bUpdates = 0, nChars = 0;
 	public:
-		const char BLINK[2] = { (char) 219, '_' };
+		const char PAUSE_CHAR = '>', BLINK[2] = { (char) 219, '_' };
 		const int BLINK_SPEED = 10, TEXT_SPEED = 1;
 		const int BOX_HEIGHT = 75, BX_PADDING = 50, BY_PADDING = 10, TX_PADDING = 10, TY_PADDING = 10, LINE_PADDING = 5;
 		const u32 TEXT_COLOR = 0xFFFFFF, BOX_COLOR = 0x343347, OUTLINE_COLOR = 0x13121a;
@@ -19,11 +20,13 @@ class Textbox
 		~Textbox();
 		void update();
 		void render(Graphics* graphics);
-		void setBuffer(std::string buffer);
+		void setMessage(std::string buffer);
 		void setMode(mode_t mode);
 		void setFramesPerTick(int fpt);
 		void setNCharsShown(int nChars);
-		bool isCaughtUp();
+		bool isComplete();
+		bool isPaused();
+		void unPause();
 };
 
 #endif

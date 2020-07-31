@@ -21,10 +21,6 @@ const double MAX_SPEED = 1.5;
 const double JUMP_VELOCITY = 3.45;
 const double TERMINAL_VELOCITY = 2.75;
 const double GRAVITATIONAL_ACCELERATION = 0.125;
-// Animation constants
-const int ANIM_MIN_RUN_TIME = 8;
-const int ANIM_MIN_GROUND_TIME = 3;
-const int ANIM_MIN_AIR_TIME = 3;
 
 class Player: public Entity
 {

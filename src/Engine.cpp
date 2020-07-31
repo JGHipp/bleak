@@ -39,7 +39,7 @@ namespace Engine
 	void showTextBox(Textbox::mode_t mode, const char* string)
 	{
 		textbox->setMode(mode);
-		textbox->setBuffer(string);
+		textbox->setMessage(string);
 		gameMode = GM_NORMAL_TB;
 	}
 
@@ -61,7 +61,11 @@ namespace Engine
 		else if(gameMode == GM_NORMAL_TB) 
 		{
 			textbox->update();
-			if(Keyboard::keyPressedThisFrame() && textbox->isCaughtUp() && textbox->mode == Textbox::TB_TYPING) gameMode = GM_NORMAL;
+			if(Keyboard::keyPressedThisFrame())
+			{
+				if(textbox->mode == Textbox::TB_TYPING && textbox->isComplete()) gameMode = GM_NORMAL;
+				if(textbox->mode == Textbox::TB_TYPING && textbox->isPaused()) textbox->unPause();
+			} 
 		}
 	}
 
@@ -93,8 +97,8 @@ namespace Engine
 		camera->setMode(Camera::CAM_FOCUSPOINT);
 		camera->setLerp(CAM_LERP);
 		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
-		showTextBox(Textbox::TB_TYPING, "\"Whenever I'm about to do something, I think, 'Would an idiot do that?' "
-			"And if they would, I do not do that thing.\"\n         -Dwight K. Schrute :)");
+		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nThe project is still in it's "
+			"early stages, but it's coming along nicely.> I'm excited to see how far I will take this engine!");
 	}
 
 	void exit()
