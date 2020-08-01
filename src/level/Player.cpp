@@ -43,7 +43,6 @@ void Player::update(Tilemap* tilemap)
 	currentAnimation->update();
 }
 
-// Collision was hell to figure out. Took 7 hours to finally get right. 
 double bdx, bdy, bx, by; // Buffer dx, dy, x, and y
 void Player::checkLeftCollision(Rectangle delta, Rectangle tile) 
 { if(delta.intersects(tile)) bdx += (tile.x + tile.width - delta.x); }

@@ -24,6 +24,8 @@ namespace Engine
 	const int GFX_WIDTH		= 480;
 	const int GFX_HEIGHT	= 280;
 	const double GFX_SCALE	= 2.0;
+	const int TEXTBOX_COLS	= 48;
+	const int TEXTBOX_ROWS	= 4;
 	const int TM_TILESIZE	= 16;
 	const double CAM_LERP	= 0.15;
 	
@@ -90,6 +92,7 @@ namespace Engine
 		initTextureAtlas(); // Load all textures and animations
 		graphics = new Graphics(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
 		textbox = new Textbox(Textbox::TB_TYPING);
+		textbox->setDimensions(TEXTBOX_ROWS, TEXTBOX_COLS, graphics->CHARACTER_WIDTH, graphics->CHARACTER_HEIGHT);
 		tilemap = new Tilemap(TM_TILESIZE, ID_TILESHEET, PATH_TILE_METADATA);
 		tilemap->loadData(PATH_DEFAULT_MAP);
 		player = new Player(50, 20);	
@@ -98,7 +101,10 @@ namespace Engine
 		camera->setLerp(CAM_LERP);
 		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
 		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nThe project is still in it's "
-			"early stages, but it's coming along nicely.> I'm excited to see how far I will take this engine!");
+			"early stages, but it's coming along nicely.>^I'm excited to see how far I will take this engine!>\n"
+			"This text is going to overflow because it is going on for such an incredible amount of time. These "
+			"words are so boring to read I'm surprised you haven't bashed your head into the keyboard, holy crap "
+			"I'm getting kinda bored having to type this whole thing out.");
 	}
 
 	void exit()
