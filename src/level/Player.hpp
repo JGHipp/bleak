@@ -10,7 +10,7 @@
 #include "Entity.hpp"
 
 const int PLAYER_WIDTH = 22;	// 24
-const int PLAYER_HEIGHT = 32;	// 33
+const int PLAYER_HEIGHT = 33;	// 33
 // 'Padding' is the space in between the horizontal and verticle collision boxes
 const int X_PADDING = 2;
 const int Y_PADDING = 2;
