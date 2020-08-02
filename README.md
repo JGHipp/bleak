@@ -9,6 +9,7 @@ Windows: <pre> start build.exe [-f &lt;target FPS&gt; ] </pre> <br/>
 <pre>
 Arrow Keys	- Move the player
 Z		- Jump
+A		- Super jump (for debugging)
 </pre>
 # Gallery
 ![Screenshot](https://raw.githubusercontent.com/JGHipp/bleak/master/screenshots/1.png)<br/>
