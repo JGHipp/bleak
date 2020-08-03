@@ -65,8 +65,12 @@ namespace Engine
 			textbox->update();
 			if(Keyboard::keyPressedThisFrame())
 			{
-				if(textbox->mode == Textbox::TB_TYPING && textbox->isComplete()) gameMode = GM_NORMAL;
-				if(textbox->mode == Textbox::TB_TYPING && textbox->isPaused()) textbox->unPause();
+				if(textbox->mode == Textbox::TB_TYPING)
+				{
+					if(textbox->isComplete()) gameMode = GM_NORMAL;
+					else if(textbox->isPaused()) textbox->unPause();
+					else textbox->setSpeed(textbox->TEXT_FAST_SPEED);
+				}
 			} 
 		}
 	}
@@ -101,7 +105,7 @@ namespace Engine
 		camera->setLerp(CAM_LERP);
 		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
 		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nThe project is still in it's "
-			"early stages, but it's coming along nicely.>^I'm excited to see how far I will take this engine!>\n"
+			"early stages, but it's coming along nicely.>^I'm excited to see how far I will take this engine!\n"
 			"This text is going to overflow because it is going on for such an incredible amount of time. These "
 			"words are so boring to read I'm surprised you haven't bashed your head into the keyboard, holy crap "
 			"I'm getting kinda bored having to type this whole thing out.");

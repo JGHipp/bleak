@@ -8,39 +8,45 @@ Textbox::Textbox(mode_t mode): mode(mode)
 Textbox::~Textbox()
 {}
 
+void Textbox::advanceChar()
+{
+	if(++nChars > (int) buffer.length()) return;
+	int nNewlines = 0, lastSpace = 0;
+	size_t lookAhead = buffer.find_first_of(' ', nChars)  - 1;
+	for(int i = 0; i < (int) (lookAhead != std::string::npos && lookAhead < (size_t) buffer.length() ? lookAhead : nChars); i++)
+	{
+		if(buffer.at(i) == '\n' || buffer.at(i) == WRAP_CHAR) nNewlines++;
+		if(buffer.at(i) == ' ') lastSpace = i;
+		if(buffer.at(i) == CLEAR_CHAR) nNewlines = 0;
+	}
+	if(nNewlines > rows - 1)
+	{
+		buffer.erase(lastSpace, 1);
+		buffer.insert(lastSpace, charToString(PAUSE_CHAR) + charToString(CLEAR_CHAR));
+		nChars = lastSpace + 1;
+	}
+	if(nChars > 0 && buffer.at(nChars - 1) == CLEAR_CHAR) // Clear the text box up to that point
+	{
+		std::string temp = buffer.substr(nChars);
+		// Reformat rest of text
+		for(int i = 0; i < (int) temp.length(); i++) if(temp.at(i) == WRAP_CHAR) temp.at(i) = ' ';
+		buffer = parse(temp);
+		nChars = 0;
+	}
+	if(nChars > 0 && buffer.at(nChars - 1) == PAUSE_CHAR) paused = true;
+	if(nChars > 1 && buffer.at(nChars - 2) == PAUSE_CHAR) buffer.erase(nChars-- - 2, 1); // Delete blinkers once past them	
+	if(nChars == (int) buffer.length()) complete = true;	
+}
+
 void Textbox::update()
 {	
 	if(mode == TB_TYPING)
 	{
-		if(cUpdates++ >= TEXT_SPEED && !paused)
+		if(cUpdates++ >= TICKS_PER_UPDATE && !paused && !complete)
 		{
 			cUpdates = 0;
-			if(nChars < (int) buffer.length()) nChars++;
-			if(nChars == (int) buffer.length()) complete = true;
-			int nNewlines = 0, lastSpace = 0;
-			size_t lookAhead = buffer.find_first_of(' ', nChars)  - 1;
-			for(int i = 0; i < (int) (lookAhead != std::string::npos && lookAhead < (size_t) buffer.length() ? lookAhead : nChars); i++)
-			{
-				if(buffer.at(i) == '\n' || buffer.at(i) == WRAP_CHAR) nNewlines++;
-				if(buffer.at(i) == ' ') lastSpace = i;
-				if(buffer.at(i) == CLEAR_CHAR) nNewlines = 0;
-			}
-			if(nNewlines > rows - 1)
-			{
-				buffer.erase(lastSpace, 1);
-				buffer.insert(lastSpace, charToString(PAUSE_CHAR) + charToString(CLEAR_CHAR));
-				nChars = lastSpace + 1;
-			}
-			if(nChars > 0 && buffer.at(nChars - 1) == CLEAR_CHAR) // Clear the text box up to that point
-			{
-				std::string temp = buffer.substr(nChars);
-				// Reformat rest of text
-				for(int i = 0; i < (int) temp.length(); i++) if(temp.at(i) == WRAP_CHAR) temp.at(i) = ' ';
-				buffer = parse(temp);
-				nChars = 0;
-			}
-			else if(nChars > 0 && buffer.at(nChars - 1) == PAUSE_CHAR) paused = true;
-			if(nChars > 1 && buffer.at(nChars - 2) == PAUSE_CHAR) buffer.erase(nChars-- - 2, 1); // Delete blinkers once past them	
+			if(nChars < (int) buffer.length())
+				 for(int i = 0; i < textSpeed; i++) if(!paused && !complete) advanceChar();
 		}
 		if(bUpdates++ >= BLINK_SPEED)
 		{
@@ -55,7 +61,7 @@ void Textbox::render(Graphics* graphics)
 	// Draw text box
 	graphics->drawRectangle(BX_PADDING, graphics->bufferHeight - height - BY_PADDING, width, height, BOX_COLOR);
 	graphics->drawRectangleOutline(BX_PADDING, graphics->bufferHeight - height - BY_PADDING, width, height, OUTLINE_COLOR);
-	// Replace '>' with blinker
+	// Replace PAUSE_CHAR with blinker
 	std::string truncated = buffer.substr(0, nChars);
 	for(int i = 0; i < (int) truncated.length(); i++) 
 		if(truncated.at(i) == PAUSE_CHAR) truncated.at(i) = (blinkChar ? BLINK[0] : BLINK[1]);
@@ -129,8 +135,14 @@ void Textbox::setDimensions(int rows, int cols, int charWidth, int charHeight)
 	this->rows = rows;
 }
 
+void Textbox::unPause()
+{
+	paused = false; 
+	textSpeed = TEXT_DEFAULT_SPEED;
+}
+
 void Textbox::setMode(mode_t mode){ this->mode = mode; }
-bool Textbox::isComplete(){ return (mode == TB_STATIC || complete); }
-void Textbox::unPause(){ paused = false; }
-bool Textbox::isPaused() { return paused; }
+void Textbox::setSpeed(int textSpeed) { this->textSpeed = textSpeed; }
 void Textbox::setNCharsShown(int nChars){ this->nChars = nChars; }
+bool Textbox::isComplete(){ return (mode == TB_STATIC || complete); }
+bool Textbox::isPaused() { return paused; }
