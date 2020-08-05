@@ -2,7 +2,7 @@
 #define ANIMATION_H
 
 #include "Texture.hpp"
-#include <vector> // std::vector
+#include <vector>
 
 class Animation
 {
@@ -18,11 +18,11 @@ class Animation
 		Animation* getCopy();
 		Texture* getCurrentFrame();	
 		Texture* getFrame(int index);
-		int getFrameIndex();
-		void setFrame(int frame);
 		void update();
-		bool isHalted();
+		void setFrame(int frame);
+		int getFrameIndex();
 		void halt(halt_t type);
+		bool isHalted();
 		void unHalt();
 };
 

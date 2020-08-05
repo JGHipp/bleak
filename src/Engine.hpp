@@ -5,17 +5,16 @@
 #include "ui/Keyboard.hpp"
 #include "gfx/Graphics.hpp"
 #include "gfx/Textbox.hpp"
-#include "level/Tilemap.hpp"
+#include "level/Level.hpp"
 #include "level/Camera.hpp"
 #include "level/Player.hpp"
 
-// Declare all Engine:: items used by other files
 namespace Engine
 {
 	extern Graphics* graphics;
 	extern Textbox* textbox;
-	extern Tilemap* tilemap;
 	extern Camera* camera;
+	extern Level* currentLevel;
 	extern Player* player;
 	extern long long unsigned int milisecondsSinceEpoch();
 	extern void run(int targetFPS);

@@ -12,14 +12,14 @@ class Entity
 		Entity(double x, double y, double width, double height);
 		Entity(double x, double y);
 		Entity();
-		void setPosition(double x, double y);
 		void updatePosition();
+		void updateX();
+		void updateY();
+		void setPosition(double x, double y);
 		void setX(double x);
 		void setY(double y);
 		void addX(double dx);
 		void addY(double dy);
-		void updateX();
-		void updateY();
 		void setDx(double dx);
 		void setDy(double dy);
 		void addDx(double ddx);

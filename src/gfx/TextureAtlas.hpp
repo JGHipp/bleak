@@ -2,12 +2,12 @@
 #define TEXTURE_ATLAS_HPP
 
 #include "Animation.hpp"
-#include <vector>	// std::vector
-#include <string>	// std::string
+#include <vector>
+#include <string>
 
+extern std::vector<std::string> textureAtlasTextureIds, textureAtlasAnimationIds;
 extern std::vector<Animation*> textureAtlasAnimations;
 extern std::vector<Texture*> textureAtlasTextures;
-extern std::vector<std::string> textureAtlasTextureIds, textureAtlasAnimationIds;
 
 void initTextureAtlas();
 void cleanupTextureAtlas();

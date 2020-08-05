@@ -4,7 +4,7 @@
 #include "../gfx/Graphics.hpp"
 #include "../gfx/Texture.hpp"
 #include "Camera.hpp"
-#include <vector> // std::vector
+#include <vector>
 
 class Tilemap
 {
@@ -21,7 +21,7 @@ class Tilemap
 		int width = 0, height = 0, tileSize;
 		void init();
 		void loadData(const char* pathToLevelFile);
-		void loadTileData(const char* pathToTileData);
+		void loadMetaData(const char* pathToMetaData);
 		void render(Graphics* graphics, Camera* camera, layer_t layer);
 		int getTileId(int x, int y);
 		void setTile(int x, int y, int id);

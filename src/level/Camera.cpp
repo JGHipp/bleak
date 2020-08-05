@@ -1,6 +1,7 @@
 #include "Camera.hpp"
+#include "../util/JMath.hpp"
 #include <iostream>
-#include <cmath>	// floor()
+#include <cmath>
 
 Camera::Camera(int centerX, int centerY): Entity(), lerp(1.0), centerX(centerX), centerY(centerY)
 {}
@@ -9,8 +10,9 @@ void Camera::update()
 {
 	if(mode == CAM_FOCUSPOINT) // Focus point mode
 	{
-		setX(getX() + ((focusX - centerX) - getX()) * lerp);
-		setY(getY() + ((focusY - centerY) - getY()) * lerp);
+		double moveX = (focusX - centerX) - getX(), moveY = (focusY - centerY) - getY();
+		setX(getX() + moveX * (absv(moveX) < MIN_DELTA ? 1.0 : lerp));
+		setY(getY() + moveY * (absv(moveY) < MIN_DELTA ? 1.0 : lerp));
 	}
 	else if(mode == CAM_STATIC) // Static mode
 	{
@@ -30,7 +32,7 @@ void Camera::update()
 	rounded to the smallest number, including
 	negatives.
 */
-const double floorEpsilon = 0.005; // Double precision is a nightmare!!
+const double floorEpsilon = 0.00005; // Double precision is a nightmare!!
 int Camera::transformX(double x)
 {
 	return (int) floor(x - getX() + floorEpsilon);
@@ -56,6 +58,8 @@ void Camera::setCenter(int centerX, int centerY)
 
 double Camera::getFocusX() { return focusX; }
 double Camera::getFocusY() { return focusY; }
-double Camera::getLerp() { return lerp; }
+double Camera::getCenterX() { return getX() + centerX; }
+double Camera::getCenterY() { return getY() + centerY; }
 void Camera::setMode(mode_t mode) { this->mode = mode; }
 void Camera::setLerp(double lerp) { this->lerp = lerp; }
+double Camera::getLerp() { return lerp; }

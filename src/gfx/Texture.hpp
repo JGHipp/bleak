@@ -13,13 +13,13 @@ class Texture
 		bool pixelInRange(int x, int y);
 		bool pixelInRange(int index);
 	public:
-		Texture(int width, int height, u32* pixels);
-		Texture(SDL_Surface* surface);
-		Texture(const char* pathToImage);
-		Texture(const char* pathToImage, int xPos, int yPos, int cropWidth, int Height);
-		~Texture();
 		int width = 0, height = 0;
 		u32* pixels;
+		Texture(int width, int height, u32* pixels);
+		Texture(const char* pathToImage, int xPos, int yPos, int cropWidth, int Height);
+		Texture(const char* pathToImage);
+		Texture(SDL_Surface* surface);
+		~Texture();
 		Texture* crop(int x, int y, int width, int height);
 		u32* getPixels();
 		int setPixel(int x, int y, u32 color);

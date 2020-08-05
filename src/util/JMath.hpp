@@ -1,8 +1,8 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include <cmath>	// cos(), ...
-#include <limits>	// std::numeric_limits
+#include <cmath>
+#include <limits>
 
 // Trig functions in degrees
 #define dtor(x) ((x) * (M_PI / 180.0))

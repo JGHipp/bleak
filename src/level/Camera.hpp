@@ -6,6 +6,7 @@
 class Camera: public Entity
 {
 	private:
+		const double MIN_DELTA = 0.5; // If we're moving less than this, just jump to focus point
 		double focusX = 0, focusY = 0, lerp;
 		int centerX = 0, centerY = 0;
 	public:
@@ -15,9 +16,10 @@ class Camera: public Entity
 		void update();
 		int transformX(double x);
 		int transformY(double y);
-		// Focus point mode
 		void setFocusPoint(double focusX, double focusY);
 		void setCenter(int centerX, int centerY);
+		double getCenterX();
+		double getCenterY();
 		double getFocusX();
 		double getFocusY();
 		double getLerp();

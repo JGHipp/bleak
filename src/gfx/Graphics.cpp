@@ -2,8 +2,8 @@
 #include "TextureAtlas.hpp"
 #include <iostream>
 
-Graphics::Graphics(int width, int height, double scale, const char* windowTitle): 
-	windowScale(scale), bufferWidth(width), bufferHeight(height)
+Graphics::Graphics(int width, int height, double scale, const char* windowTitle): windowScale(scale), 
+	bufferWidth(width), bufferHeight(height)
 {
 	window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width * scale, height * scale, 0);
     windowSurface = SDL_GetWindowSurface(window);

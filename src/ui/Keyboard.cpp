@@ -1,16 +1,16 @@
 #include "Keyboard.hpp"
 #include <iostream>
 #include <vector>
+
+/*
+	Originally key values where being stored in a 
+	big arrray, then I realized that is hella dumb.
+*/
 namespace Keyboard
 {
 	std::vector<SDL_Keycode> keyHash;
 	std::vector<bool> keyValues;
 	bool keyPress = false;
-
-	void prepareForPoll()
-	{
-		keyPress = false;
-	}
 
 	void setField(SDL_Keycode key, bool pressed)
 	{
@@ -49,4 +49,5 @@ namespace Keyboard
 	}
 	
 	bool keyPressedThisFrame() { return keyPress; }
+	void prepareForPoll() { keyPress = false; }
 }

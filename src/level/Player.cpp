@@ -37,7 +37,8 @@ void Player::update(Tilemap* tilemap)
 	if(currentAnimation->isHalted()) currentAnimation->setFrame(0);
 	if((pdx == 0 || !isOnGround()))
 	{
-		if(!currentAnimation->isHalted()) currentAnimation->halt(Animation::HALT_WAIT_NEXT); // Wait till next frame to stop animation
+		if(!currentAnimation->isHalted()) currentAnimation->halt
+			(isJumping() ? Animation::HALT_IMMEDIATE : Animation::HALT_WAIT_NEXT);
 	}
 	else if(currentAnimation->isHalted()) currentAnimation->unHalt();
 	currentAnimation->update();
@@ -95,7 +96,7 @@ void Player::updatePosition(Tilemap* tilemap) // Override
 			checkBottomCollision(DELTA_BOTTOM, tile);
 	}
 	by += bdy;
-	setPosition(bx, by); // Update real position with buffer
+	setPosition(bx, by);
 	// Determine whether player is on the ground
 	bool isOnGround = false;
 	Rectangle groundTest = Rectangle(bx + X_PADDING, by + getHeight() / 2, getWidth() - X_PADDING * 2 , getHeight() / 2 + 1);
@@ -122,7 +123,9 @@ void Player::render(Graphics* graphics, Camera* camera)
 		}
 	}
 	else texture = getCurrentAnimation()->getCurrentFrame(); 
-	graphics->drawTexture(texture, getX(), getY(), graphics->TRANSPARENT, camera);
+	double correctedX = absv(getDx()) > 0 ? getX() : (int) getX(), correctedY = absv(getDy()) > 0 ? getY() : (int) getY(); // Fix jitter
+	int xOffset = isFacingRight() ? getWidth() - texture->width : 0; // Make sure texture fits in collision box
+	graphics->drawTexture(texture, correctedX + xOffset, correctedY, graphics->TRANSPARENT, camera);
 }
 
 void Player::handleInput()
@@ -160,4 +163,5 @@ void Player::applyGravity()
 Animation* Player::getCurrentAnimation() { return (isFacingRight() ? walkingRightAnimation : walkingLeftAnimation); }
 bool Player::isFacingRight() { return (facing == FACING_RIGHT); }
 bool Player::isFacingLeft() { return (facing == FACING_LEFT); }
+bool Player::isJumping() { return (!isOnGround() && pdy < 0); }
 bool Player::isOnGround() { return onGround; }

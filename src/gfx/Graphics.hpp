@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 
 typedef Uint32 u32;
+
 class Graphics
 {
 	private:

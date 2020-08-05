@@ -1,7 +1,15 @@
+/*
+	Textbox message special characters:
+	'\n': Newline
+	'>'	: Pause (displays a blinker)
+	'^' : Clear the textbox
+*/
+
 #include "Textbox.hpp"
 #include <iostream>
 #include <algorithm>
 #include <vector>
+
 Textbox::Textbox(mode_t mode): mode(mode)
 {}
 
@@ -118,7 +126,6 @@ void Textbox::setMessage(std::string message)
 {
 	this->originalMessage = message; 
 	this->buffer = parse(message + PAUSE_CHAR);
-	// Reset
 	paused = false;
 	complete = false;
 	blinkChar = 0;

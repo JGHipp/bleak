@@ -4,13 +4,13 @@
 #include "../util/JMath.hpp"
 #include "../util/Log.hpp"
 #include <iostream>
-#include <fstream>	// std::ifstream, ...
-#include <sstream>	// std::stringstream
+#include <fstream>
+#include <sstream>
 
 Tilemap::Tilemap(int tileSize, const char* textureFile, const char* metadataFile): tileSize(tileSize)
 {
 	tilemapTexture = getTexture(std::string(textureFile));
-	loadTileData(metadataFile);
+	loadMetaData(metadataFile);
 	init();
 }
 
@@ -32,17 +32,12 @@ void Tilemap::init()
 		int tilePosX = id % nCols;
 		int tilePosY = id / nCols; 
 		Texture* croppedTile = tilemapTexture->crop(tilePosX * tileSize, tilePosY * tileSize, tileSize, tileSize);
-		// Initialize the tileTextures array assuming all tiles are equal size
+		// Initialize the tileTextures array
 		if(id == 0) tileTextures = new Texture*[nRows * nCols];
 		tileTextures[id] = croppedTile;
 	}
 }
 
-/*
-	Loads tile data from a BMP image
-    First 4 rows of image are used to 
-    declare colors for each tile ID
-*/
 void Tilemap::loadData(const char* pathToLevelFile)
 {
 	std::ifstream readFile(pathToLevelFile);
@@ -57,11 +52,10 @@ void Tilemap::loadData(const char* pathToLevelFile)
 	for(int i = 3; i < (int) lines.size(); i++) tileData[i - 3] = atoi(lines.at(i).c_str());
 }
 
-// Reads file that specifies information about each tile (e.g. solidity)
-void Tilemap::loadTileData(const char* pathToTileData)
+void Tilemap::loadMetaData(const char* pathToMetaData)
 {
-	std::ifstream readFile(pathToTileData);
-	if(!readFile.is_open()) error("Error reading tile data from '%s'", pathToTileData);
+	std::ifstream readFile(pathToMetaData);
+	if(!readFile.is_open()) error("Error reading tile meta data from '%s'", pathToMetaData);
 	std::string line;
 	std::vector<solid_t>* solid = new std::vector<solid_t>;
 	std::vector<layer_t>* foreground = new std::vector<layer_t>;
@@ -88,10 +82,10 @@ void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)
 	const int padding = 4;
 	int nRowTiles = graphics->bufferWidth / tileSize;
 	int nColTiles = graphics->bufferHeight / tileSize;
-	int x1 = clamp((int) camera->getFocusX() / tileSize - (nRowTiles / 2) - padding, 0, width);
-	int x2 = clamp((int) camera->getFocusX() / tileSize + (nRowTiles / 2) + padding, 0, width);
-	int y1 = clamp((int) camera->getFocusY() / tileSize - (nColTiles / 2) - padding, 0, height);
-	int y2 = clamp((int) camera->getFocusY() / tileSize + (nColTiles / 2) + padding, 0, height);
+	int x1 = clamp((int) camera->getCenterX() / tileSize - (nRowTiles / 2) - padding, 0, width);
+	int x2 = clamp((int) camera->getCenterX() / tileSize + (nRowTiles / 2) + padding, 0, width);
+	int y1 = clamp((int) camera->getCenterY() / tileSize - (nColTiles / 2) - padding, 0, height);
+	int y2 = clamp((int) camera->getCenterY() / tileSize + (nColTiles / 2) + padding, 0, height);
 	for(int x = x1; x <= x2; x++)
 	{
 		for(int y = y1; y <= y2; y++)

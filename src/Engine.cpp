@@ -5,37 +5,34 @@
 #include <iostream>
 #include <string>
 #include <chrono>
-#ifdef __MINGW32__		// Add suport for cross-compiling
+#ifdef __MINGW32__
 #include <mingw.thread.h>
 #else
-#include <thread>		// std::this_thread::sleep_for()
+#include <thread>
 #endif
 #define SDL_MAIN_HANDLED
-#include <SDL2/SDL.h> 	// Simple DirectMedia Layer
+#include <SDL2/SDL.h>
 
 namespace Engine
 {
 	// Constants
-	const std::string VERSION		= "PreAlpha v1.2";
-	const char* PATH_TILE_METADATA	= "res/tile_mdata.data";
-	const char* ID_TILESHEET		= "tile_sheet";
+	const std::string VERSION		= "PreAlpha v1.3";
 	const char* PATH_DEFAULT_MAP	= "level/default.data";
 	const u32 BACKGROUND_COLOR = 0x0d0d0d;
 	const int GFX_WIDTH		= 480;
-	const int GFX_HEIGHT	= 280;
+	const int GFX_HEIGHT	= 380;
 	const double GFX_SCALE	= 2.0;
 	const int TEXTBOX_COLS	= 48;
 	const int TEXTBOX_ROWS	= 4;
-	const int TM_TILESIZE	= 16;
-	const double CAM_LERP	= 0.15;
+	const double CAM_LERP	= 0.055;
 	
 	bool running;
 	long long updates;
 	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL;
 	Graphics* graphics;
 	Textbox* textbox;
-	Tilemap* tilemap;
 	Camera* camera;
+	Level* currentLevel;
 	Player* player;
 
 	void showTextBox(Textbox::mode_t mode, const char* string)
@@ -54,12 +51,7 @@ namespace Engine
     		if(event.type == SDL_QUIT) running = false;
     		Keyboard::update(event);
 		}
-		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
-		{
-			camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
-			camera->update();
-		}
-		if(gameMode == GM_NORMAL) player->update(tilemap);
+		if(gameMode == GM_NORMAL) player->update(currentLevel->tilemap);
 		else if(gameMode == GM_NORMAL_TB) 
 		{
 			textbox->update();
@@ -73,6 +65,11 @@ namespace Engine
 				}
 			} 
 		}
+		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
+		{
+			camera->setFocusPoint((int) player->getX(), (int) player->getY());
+			camera->update();
+		}
 	}
 
 	void render()
@@ -81,9 +78,9 @@ namespace Engine
 		graphics->drawRectangle(0, 0, graphics->renderBuffer->width, graphics->renderBuffer->height, BACKGROUND_COLOR);
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
-			tilemap->render(graphics, camera, Tilemap::TILE_BACKGROUND);
+			currentLevel->render(graphics, camera, Level::LEVEL_BACKGROUND);
 			player->render(graphics, camera);
-			tilemap->render(graphics, camera, Tilemap::TILE_FOREGROUND);
+			currentLevel->render(graphics, camera, Level::LEVEL_FOREGROUND);
 		}
 		if(gameMode == GM_NORMAL_TB) textbox->render(graphics);
 		graphics->updateWindow();
@@ -97,18 +94,14 @@ namespace Engine
 		graphics = new Graphics(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
 		textbox = new Textbox(Textbox::TB_TYPING);
 		textbox->setDimensions(TEXTBOX_ROWS, TEXTBOX_COLS, graphics->CHARACTER_WIDTH, graphics->CHARACTER_HEIGHT);
-		tilemap = new Tilemap(TM_TILESIZE, ID_TILESHEET, PATH_TILE_METADATA);
-		tilemap->loadData(PATH_DEFAULT_MAP);
-		player = new Player(50, 20);	
+		currentLevel = new Level(PATH_DEFAULT_MAP);
+		player = new Player(300, 272);	
 		camera = new Camera(graphics->bufferWidth / 2, graphics->bufferHeight / 2);
 		camera->setMode(Camera::CAM_FOCUSPOINT);
 		camera->setLerp(CAM_LERP);
 		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
-		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nThe project is still in it's "
-			"early stages, but it's coming along nicely.>^I'm excited to see how far I will take this engine!\n"
-			"This text is going to overflow because it is going on for such an incredible amount of time. These "
-			"words are so boring to read I'm surprised you haven't bashed your head into the keyboard, holy crap "
-			"I'm getting kinda bored having to type this whole thing out.");
+		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nSo far this is only a basic platforming "
+		"engine, but there will be more added! :)");
 	}
 
 	void exit()
@@ -116,7 +109,7 @@ namespace Engine
 		log("Terminating");
 		cleanupTextureAtlas();
 		delete graphics;
-		delete tilemap;
+		delete currentLevel;
 		delete camera;
 		delete player;
 		SDL_Quit();

@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include <cstddef>	// size_t
+#include <cstddef>
 #include <SDL2/SDL.h>
 
 namespace Keyboard

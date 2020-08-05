@@ -1,7 +1,7 @@
 #include "TextureAtlas.hpp"
 #include "../util/Log.hpp"
 #include <iostream>
-#include <cstdarg>	// va_list
+#include <cstdarg>
 
 std::vector<Animation*> textureAtlasAnimations;
 std::vector<Texture*> textureAtlasTextures;
@@ -9,8 +9,7 @@ std::vector<std::string> textureAtlasTextureIds, textureAtlasAnimationIds;
 
 void initTextureAtlas()
 {
-	const int PW = 24, PH = 33; // Player sprite width and height
-	const int PS = 7; // Player animation speed
+	const int PW = 24, PH = 33, PS = 6; // Player width, height, and animation speed
 	defineTexture("font_map", "res/font.bmp");
 	defineTexture("tile_sheet", "res/tilesheet.bmp");
 	defineTexture("player_left_stand", "res/player.bmp", PW * 7, 0, PW, PH);

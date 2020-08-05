@@ -1,7 +1,7 @@
 #include "Log.hpp"
-#include <cstdio>	// printf(), ...
-#include <cstdlib>	// exit()
-#include <cstdarg>	// va_list
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
 
 void error(const char* format, ...)
 {
