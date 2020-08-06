@@ -67,7 +67,7 @@ namespace Engine
 		}
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
-			camera->setFocusPoint((int) player->getX(), (int) player->getY());
+			camera->setFocusPoint((int) player->getX() + PLAYER_WIDTH / 2, (int) player->getY() + PLAYER_HEIGHT / 2);
 			camera->update();
 		}
 	}
