@@ -13,4 +13,3 @@ A		- Super jump (for debugging)
 </pre>
 ## Gallery
 ![Screenshot](https://raw.githubusercontent.com/JGHipp/bleak/master/screenshots/1.png)<br/>
-![Screenshot](https://raw.githubusercontent.com/JGHipp/bleak/master/screenshots/2.png)
