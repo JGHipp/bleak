@@ -3,7 +3,7 @@
 
 #include "../gfx/Graphics.hpp"
 #include "../gfx/Texture.hpp"
-#include "Camera.hpp"
+#include "../gfx/Camera.hpp"
 #include <vector>
 
 class Tilemap
@@ -22,7 +22,7 @@ class Tilemap
 		void init();
 		void loadData(const char* pathToLevelFile);
 		void loadMetaData(const char* pathToMetaData);
-		void render(Graphics* graphics, Camera* camera, layer_t layer);
+		void render(layer_t layer);
 		int getTileId(int x, int y);
 		void setTile(int x, int y, int id);
 		bool isSolid(int id);

@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "../gfx/TextureAtlas.hpp"
+#include "../ui/Keyboard.hpp"
 #include <iostream>
 
 Player::Player(double x, double y): Entity(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
@@ -105,7 +106,7 @@ void Player::updatePosition(Tilemap* tilemap) // Override
 	onGround = isOnGround;	
 }
 
-void Player::render(Graphics* graphics, Camera* camera)
+void Player::render()
 {
 	Texture* texture;
 	// Determine which texture to draw
@@ -125,7 +126,7 @@ void Player::render(Graphics* graphics, Camera* camera)
 	else texture = getCurrentAnimation()->getCurrentFrame(); 
 	double correctedX = absv(getDx()) > 0 ? getX() : (int) getX(), correctedY = absv(getDy()) > 0 ? getY() : (int) getY(); // Fix jitter
 	int xOffset = isFacingRight() ? getWidth() - texture->width : 0; // Make sure texture fits in collision box
-	graphics->drawTexture(texture, correctedX + xOffset, correctedY, graphics->TRANSPARENT, camera);
+	Graphics::drawTextureTransparent(texture, correctedX + xOffset, correctedY, Graphics::TRANSPARENT, true);
 }
 
 void Player::handleInput()

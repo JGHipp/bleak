@@ -2,10 +2,7 @@
 #define PLAYER_H
 
 #include "../gfx/TextureAtlas.hpp"
-#include "../gfx/Graphics.hpp"
 #include "../gfx/Texture.hpp"
-#include "../ui/Keyboard.hpp"
-#include "Camera.hpp"
 #include "Tilemap.hpp"
 #include "Entity.hpp"
 
@@ -16,7 +13,7 @@ const int X_PADDING = 2;
 const int Y_PADDING = 2;
 // Physics constants
 const double ACCELERATION = 0.075;
-const double DECCELERATION = 0.1;
+const double DECCELERATION = 0.15;
 const double MAX_SPEED = 1.75;
 const double JUMP_VELOCITY = 3.45;
 const double TERMINAL_VELOCITY = 2.75;
@@ -44,7 +41,7 @@ class Player: public Entity
 		Player();
 		~Player();
 		void update(Tilemap* tilemap);
-		void render(Graphics* graphics, Camera* camera);
+		void render();
 		bool isFacingRight();
 		bool isFacingLeft();
 		bool isOnGround();

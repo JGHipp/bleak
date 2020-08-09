@@ -2,6 +2,11 @@
 	Written by John Gustav Hippisley
 */
 #include "Engine.hpp"
+#include "util/Log.hpp"
+#include "gfx/Graphics.hpp"
+#include "gfx/Textbox.hpp"
+#include "gfx/Camera.hpp"
+#include "ui/Keyboard.hpp"
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -29,16 +34,13 @@ namespace Engine
 	bool running;
 	long long updates;
 	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL;
-	Graphics* graphics;
-	Textbox* textbox;
-	Camera* camera;
 	Level* currentLevel;
 	Player* player;
 
 	void showTextBox(Textbox::mode_t mode, const char* string)
 	{
-		textbox->setMode(mode);
-		textbox->setMessage(string);
+		Textbox::mode = mode;
+		Textbox::setMessage(string);
 		gameMode = GM_NORMAL_TB;
 	}
 
@@ -54,36 +56,36 @@ namespace Engine
 		if(gameMode == GM_NORMAL) player->update(currentLevel->tilemap);
 		else if(gameMode == GM_NORMAL_TB) 
 		{
-			textbox->update();
+			Textbox::update();
 			if(Keyboard::keyPressedThisFrame())
 			{
-				if(textbox->mode == Textbox::TB_TYPING)
+				if(Textbox::mode == Textbox::TB_TYPING)
 				{
-					if(textbox->isComplete()) gameMode = GM_NORMAL;
-					else if(textbox->isPaused()) textbox->unPause();
-					else textbox->setSpeed(textbox->TEXT_FAST_SPEED);
+					if(Textbox::isComplete()) gameMode = GM_NORMAL;
+					else if(Textbox::isPaused()) Textbox::unPause();
+					else Textbox::textSpeed = Textbox::TEXT_FAST_SPEED;
 				}
 			} 
 		}
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
-			camera->setFocusPoint((int) player->getX() + PLAYER_WIDTH / 2, (int) player->getY() + PLAYER_HEIGHT / 2);
-			camera->update();
+			Camera::setFocusPoint((int) player->getX() + PLAYER_WIDTH / 2, (int) player->getY() + PLAYER_HEIGHT / 2);
+			Camera::update();
 		}
 	}
 
 	void render()
 	{
-		graphics->clearBuffer();
-		graphics->drawRectangle(0, 0, graphics->renderBuffer->width, graphics->renderBuffer->height, BACKGROUND_COLOR);
+		Graphics::clearBuffer();
+		Graphics::drawRectangle(0, 0, Graphics::bufferWidth, Graphics::bufferHeight, BACKGROUND_COLOR);
 		if(gameMode == GM_NORMAL || gameMode == GM_NORMAL_TB)
 		{
-			currentLevel->render(graphics, camera, Level::LEVEL_BACKGROUND);
-			player->render(graphics, camera);
-			currentLevel->render(graphics, camera, Level::LEVEL_FOREGROUND);
+			currentLevel->render(Level::LEVEL_BACKGROUND);
+			player->render();
+			currentLevel->render(Level::LEVEL_FOREGROUND);
 		}
-		if(gameMode == GM_NORMAL_TB) textbox->render(graphics);
-		graphics->updateWindow();
+		if(gameMode == GM_NORMAL_TB) Textbox::render();
+		Graphics::updateWindow();
 	}	
 
 	void init()
@@ -91,15 +93,14 @@ namespace Engine
 		running = true;
 		SDL_Init(SDL_INIT_EVERYTHING);
 		initTextureAtlas(); // Load all textures and animations
-		graphics = new Graphics(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
-		textbox = new Textbox(Textbox::TB_TYPING);
-		textbox->setDimensions(TEXTBOX_ROWS, TEXTBOX_COLS, graphics->CHARACTER_WIDTH, graphics->CHARACTER_HEIGHT);
+		Graphics::init(GFX_WIDTH, GFX_HEIGHT, GFX_SCALE, ("Bleak " + VERSION).c_str());
 		currentLevel = new Level(PATH_DEFAULT_MAP);
 		player = new Player(300, 272);	
-		camera = new Camera(graphics->bufferWidth / 2, graphics->bufferHeight / 2);
-		camera->setMode(Camera::CAM_FOCUSPOINT);
-		camera->setLerp(CAM_LERP);
-		camera->setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
+		Camera::setCenter(Graphics::bufferWidth / 2, Graphics::bufferHeight / 2);
+		Camera::setFocusPoint(player->getRectangle().getCenterX(), player->getRectangle().getCenterY());
+		Camera::mode = Camera::CAM_FOCUSPOINT;
+		Camera::lerp = CAM_LERP;
+		Textbox::setDimensions(TEXTBOX_ROWS, TEXTBOX_COLS, Graphics::CHARACTER_WIDTH, Graphics::CHARACTER_HEIGHT);
 		showTextBox(Textbox::TB_TYPING, "Welcome to Bleak PreAlpha v1.2!>\nSo far this is only a basic platforming "
 		"engine, but there will be more added! :)");
 	}
@@ -108,9 +109,7 @@ namespace Engine
 	{
 		log("Terminating");
 		cleanupTextureAtlas();
-		delete graphics;
 		delete currentLevel;
-		delete camera;
 		delete player;
 		SDL_Quit();
 	}

@@ -1,4 +1,5 @@
 #include "Level.hpp"
+#include "../gfx/Camera.hpp"
 
 Level::Level(const char* pathToTilemap)
 {
@@ -14,15 +15,15 @@ Level::~Level()
 void Level::update()
 {}
 
-void Level::render(Graphics* graphics, Camera* camera, layer_t layer)
+void Level::render(layer_t layer)
 {
 	if(layer == LEVEL_BACKGROUND)
 	{
-		tilemap->render(graphics, camera, Tilemap::TILE_BACKGROUND);
+		tilemap->render(Tilemap::TILE_BACKGROUND);
 	}
 	else
 	{
-		tilemap->render(graphics, camera, Tilemap::TILE_FOREGROUND);
+		tilemap->render(Tilemap::TILE_FOREGROUND);
 	}
 } 
 

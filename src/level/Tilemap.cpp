@@ -76,21 +76,21 @@ void Tilemap::loadMetaData(const char* pathToMetaData)
 	layerData = foreground->data();
 }
 
-void Tilemap::render(Graphics* graphics, Camera* camera, layer_t layer)
+void Tilemap::render(layer_t layer)
 {
 	// Only render the tiles that are in the view of the camera
 	const int padding = 4;
-	int nRowTiles = graphics->bufferWidth / tileSize;
-	int nColTiles = graphics->bufferHeight / tileSize;
-	int x1 = clamp((int) camera->getCenterX() / tileSize - (nRowTiles / 2) - padding, 0, width);
-	int x2 = clamp((int) camera->getCenterX() / tileSize + (nRowTiles / 2) + padding, 0, width);
-	int y1 = clamp((int) camera->getCenterY() / tileSize - (nColTiles / 2) - padding, 0, height);
-	int y2 = clamp((int) camera->getCenterY() / tileSize + (nColTiles / 2) + padding, 0, height);
+	int nRowTiles = Graphics::bufferWidth / tileSize;
+	int nColTiles = Graphics::bufferHeight / tileSize;
+	int x1 = clamp((int) Camera::getCenterX() / tileSize - (nRowTiles / 2) - padding, 0, width);
+	int x2 = clamp((int) Camera::getCenterX() / tileSize + (nRowTiles / 2) + padding, 0, width);
+	int y1 = clamp((int) Camera::getCenterY() / tileSize - (nColTiles / 2) - padding, 0, height);
+	int y2 = clamp((int) Camera::getCenterY() / tileSize + (nColTiles / 2) + padding, 0, height);
 	for(int x = x1; x <= x2; x++)
 	{
 		for(int y = y1; y <= y2; y++)
 			if((isInForeground(x, y) && layer == TILE_FOREGROUND) || (!isInForeground(x, y) && layer == TILE_BACKGROUND)) 
-				graphics->drawTexture(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, graphics->TRANSPARENT, camera);
+				Graphics::drawTextureTransparent(tileTextures[getTileId(x, y)], x * tileSize, y * tileSize, Graphics::TRANSPARENT, true);
 	}
 }
 

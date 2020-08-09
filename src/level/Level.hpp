@@ -15,7 +15,7 @@ class Level
 		Level(const char* pathToTilemap);
 		~Level();
 		void update();
-		void render(Graphics* graphics, Camera* camera, layer_t layer);
+		void render(layer_t layer);
 };
 
 #endif

@@ -1,49 +1,43 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "../level/Camera.hpp"
 #include "../util/JMath.hpp"
+#include "../util/Rectangle.hpp"
+#include "Camera.hpp"
 #include "Texture.hpp"
 #include <string>
 #include <SDL2/SDL.h>
 
 typedef Uint32 u32;
 
-class Graphics
+namespace Graphics
 {
-	private:
-		SDL_Window* window; 		// Pointer to window 
-		SDL_Surface* windowSurface; // imageSurface gets drawn to this and scaled
-		SDL_Surface* imageSurface;  // What we draw to
-	public:
-		const int CHARACTER_WIDTH = 8, CHARACTER_HEIGHT = 8;
-		const u32 TRANSPARENT = 0xFF00FF, CHARACTER_SOLID = 0xFFFFFF;
-		Texture* renderBuffer;		// Texture object representing imageSurface
-		double windowScale, bufferWidth, bufferHeight;
-		Graphics(int width, int height, double scale, const char* windowTitle);
-		~Graphics();
-		void updateWindow();
-		void clearBuffer();
-		int setPixel(int x, int y, u32 color);
-		void drawRectangle(int xPos, int yPos, int width, int height, u32 color);
-		void drawRectangle(double xPos, double yPos, int width, int height, u32 color, Camera* camera);
-		void drawRectangle(Rectangle rectangle, u32 color);
-		void drawRectangle(Rectangle rectangle, u32 color, Camera* camera);
-		void drawRectangleOutline(int xPos, int yPos, int width, int height, u32 color);
-		void drawRectangleOutline(double xPos, double yPos, int width, int height, u32 color, Camera* camera);
-		void drawRectangleOutline(Rectangle rectangle, u32 color);
-		void drawRectangleOutline(Rectangle rectangle, u32 color, Camera* camera);
-		void drawLine(int x1, int y1, int x2, int y2, u32 color);
-		void drawLine(double x1, double y1, double x2, double y2, u32 color, Camera* camera);
-		void drawVector(int x, int y, double angle, double magnitude, u32 color);
-		void drawVector(double x, double y, double angle, double magnitude, u32 color, Camera* camera);
-		void drawTexture(Texture* texture, int xPos, int yPos);
-		void drawTexture(Texture* texture, double xPos, double yPos, Camera* camera);
-		void drawTexture(Texture* texture, int xPos, int yPos, u32 transparent);
-		void drawTexture(Texture* texture, double xPos, double yPos, u32 transparent, Camera* camera);
-		Texture** characterBitmap;
-		void drawText(std::string text, int xPos, int yPos, u32 color);
-		void drawText(std::string text, double xPos, double yPos, u32 color, Camera* camera);
+		extern double windowScale, bufferWidth, bufferHeight;
+		extern const int CHARACTER_WIDTH, CHARACTER_HEIGHT;
+		extern const u32 TRANSPARENT, CHARACTER_SOLID;
+		extern void init(int width, int height, double scale, const char* windowTitle);
+		extern void cleanup();
+		extern void updateWindow();
+		extern void clearBuffer();
+		extern int setPixel(int x, int y, u32 color);
+		extern void drawRectangle(int xPos, int yPos, int width, int height, u32 color);
+		extern void drawRectangle(double xPos, double yPos, int width, int height, u32 color, bool camera);
+		extern void drawRectangle(Rectangle rectangle, u32 color);
+		extern void drawRectangle(Rectangle rectangle, u32 color, bool camera);
+		extern void drawRectangleOutline(int xPos, int yPos, int width, int height, u32 color);
+		extern void drawRectangleOutline(double xPos, double yPos, int width, int height, u32 color, bool camera);
+		extern void drawRectangleOutline(Rectangle rectangle, u32 color);
+		extern void drawRectangleOutline(Rectangle rectangle, u32 color, bool camera);
+		extern void drawLine(int x1, int y1, int x2, int y2, u32 color);
+		extern void drawLine(double x1, double y1, double x2, double y2, u32 color, bool camera);
+		extern void drawVector(int x, int y, double angle, double magnitude, u32 color);
+		extern void drawVector(double x, double y, double angle, double magnitude, u32 color, bool camera);
+		extern void drawTexture(Texture* texture, int xPos, int yPos);
+		extern void drawTexture(Texture* texture, double xPos, double yPos, bool camera);
+		extern void drawTextureTransparent(Texture* texture, int xPos, int yPos, u32 transparent);
+		extern void drawTextureTransparent(Texture* texture, double xPos, double yPos, u32 transparent, bool camera);
+		extern void drawText(std::string text, int xPos, int yPos, u32 color);
+		extern void drawText(std::string text, double xPos, double yPos, u32 color, bool camera);
 };
 
 #endif
