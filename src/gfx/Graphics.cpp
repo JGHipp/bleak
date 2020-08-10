@@ -170,7 +170,7 @@ namespace Graphics
 			Texture* character = characterBitmap[(int) ((unsigned char) text.at(i))]->crop(0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 			for(int i = 0; i < character->width * character->height; i++)
 				if(character->pixels[i] == CHARACTER_SOLID) character->pixels[i] = color;
-			drawTexture(character, xPos + i * CHARACTER_WIDTH, yPos, TRANSPARENT);
+			drawTextureTransparent(character, xPos + i * CHARACTER_WIDTH, yPos, TRANSPARENT);
 		}
 	}
 

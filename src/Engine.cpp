@@ -24,13 +24,11 @@ namespace Engine
 	const std::string VERSION		= "PreAlpha v1.3";
 	const char* PATH_DEFAULT_MAP	= "level/default.data";
 	const u32 BACKGROUND_COLOR = 0x0d0d0d;
-	const int GFX_WIDTH		= 480;
-	const int GFX_HEIGHT	= 380;
-	const double GFX_SCALE	= 2.0;
-	const int TEXTBOX_COLS	= 48;
-	const int TEXTBOX_ROWS	= 4;
-	const double CAM_LERP	= 0.055;
-	
+	const int GFX_WIDTH = 480, GFX_HEIGHT = 380; 
+	const double GFX_SCALE = 2.0;
+	const int TEXTBOX_COLS = 48, TEXTBOX_ROWS= 4;
+	const double CAM_LERP = 0.055;
+
 	bool running;
 	long long updates;
 	enum { GM_TITLE, GM_LOADING, GM_NORMAL, GM_NORMAL_TB, GM_TRANSITION, GM_CUTSCENE, GM_CREDITS } gameMode = GM_NORMAL;
